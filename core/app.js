@@ -1,3 +1,6 @@
+// app.js — ИСПРАВЛЕННАЯ ВЕРСИЯ v1.2
+// ============================================================
+
 let currentFlow = null;
 let currentAnswers = {};
 let currentQuestionIndex = 0;
@@ -23,7 +26,9 @@ function getDayCycle() {
     { name: "rest", hours: [22,23,0,1,2,3,4,5], icon: "😴", type: "rest" }
   ];
   const current = cycles.find(c => c.hours.includes(hour)) || cycles[0];
-  return { ...current, label: t('day_cycle_' + current.name) };
+  const hintKey = 'day_cycle_hint_' + current.type;
+  const hint = t(hintKey) || '';
+  return { ...current, label: t('day_cycle_' + current.name), hint: hint };
 }
 window.getDayCycle = getDayCycle;
 
@@ -49,6 +54,13 @@ function renderQuestion() {
   let html = '<div class="question-card">';
   html += '<div class="question-num">' + t('question_of', {current: currentQuestionIndex+1, total: visible.length}) + '</div>';
   html += '<h3 class="question-text">' + q.text + '</h3>';
+  
+  // Показываем подсказку о цикле дня
+  const cycle = getDayCycle();
+  if(cycle && cycle.icon) {
+    html += '<div class="day-cycle-hint">' + cycle.icon + ' ' + cycle.label + '</div>';
+  }
+  
   html += '<div class="options">';
   for(const opt of q.options) {
     html += "<button class=\"option-btn\" onclick=\"selectAnswer('" + q.id + "', '" + opt.id + "')\">" + opt.label + "</button>";
@@ -78,7 +90,7 @@ function showResults() {
   html += '<p>' + t('click_to_expand') + '</p></div>';
 
   // Cross-module рекомендации
-  if(typeof ProgressEngine !== 'undefined') {
+  if(typeof ProgressEngine !== 'undefined' && typeof ProgressEngine.getRecommendations === 'function') {
     const recs = ProgressEngine.getRecommendations();
     if(recs && recs.length > 0) {
       html += '<div class="cross-recommendation">';
@@ -111,6 +123,15 @@ function showResults() {
       if(sol.warnings && sol.warnings.length) {
         html += '<h4>' + t('detail_warnings') + '</h4><ul>' + sol.warnings.map(w => '<li>' + w + '</li>').join('') + '</ul>';
       }
+      // Ресурсы (книги, техники)
+      if(sol.resources && sol.resources.length) {
+        html += '<h4>📚 Ресурсы</h4><ul class="resources-list">';
+        for(const r of sol.resources) {
+          const icon = r.type === 'book' ? '📖' : r.type === 'technique' ? '🧠' : '🔗';
+          html += '<li>' + icon + ' ' + r.label + '</li>';
+        }
+        html += '</ul>';
+      }
       html += '</div></div>';
     }
   }
@@ -126,13 +147,38 @@ function showResults() {
       category: currentFlow.meta.category,
       timestamp: Date.now()
     });
+    // Обновляем daily_action на главной
+    updateDailyTaskUI();
   }
+  
   // Сохраняем профиль модуля
   if(typeof ProgressEngine !== 'undefined') {
     const profile = { energy: 5, blocks: [] };
     if(currentAnswers['flow_state']) profile.identity = currentAnswers['flow_state'];
     ProgressEngine.saveModuleProfile(currentFlow.meta.module, profile);
   }
+}
+
+function updateDailyTaskUI() {
+  if(typeof ProgressEngine === 'undefined') return;
+  const task = ProgressEngine.getDailyAction();
+  if(!task || !task.text) return;
+  
+  const container = document.getElementById('dailyTaskBox');
+  if(!container) return;
+  
+  const isDone = task.completed || false;
+  container.innerHTML = `
+    <div class="daily-task-content">
+      <div class="daily-task-title">🎯 ${t('daily_task_title')}</div>
+      <div class="daily-task-text">${task.text}</div>
+      <button class="daily-task-btn" onclick="completeDailyTask()" ${isDone ? 'disabled style="opacity:0.5"' : ''}>
+        ${isDone ? '✅ Выполнено' : t('daily_task_done')}
+      </button>
+    </div>
+  `;
+  if(isDone) container.classList.add('done');
+  else container.classList.remove('done');
 }
 
 function toggleDetail(card) {
@@ -156,6 +202,7 @@ window.showScreen = showScreen;
 
 function goHome() {
   showScreen('screen-home');
+  updateDailyTaskUI();
 }
 window.goHome = goHome;
 
@@ -163,12 +210,25 @@ function completeDailyTask() {
   if(typeof ProgressEngine !== 'undefined') {
     ProgressEngine.completeTask('daily');
     showToast('✅ Задание выполнено!');
-    const btn = document.querySelector('.daily-task-btn');
-    if(btn) { btn.textContent = '✅ Выполнено'; btn.disabled = true; btn.style.opacity = '0.5'; }
-    const box = document.getElementById('dailyTaskBox');
-    if(box) box.classList.add('done');
+    
+    // Обновить все кнопки
+    document.querySelectorAll('.daily-task-btn').forEach(btn => {
+      btn.textContent = '✅ Выполнено';
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+    });
+    
+    document.querySelectorAll('#dailyTaskBox, .daily-task-box').forEach(box => {
+      box.classList.add('done');
+    });
   }
 }
 window.completeDailyTask = completeDailyTask;
 
-console.log('✅ App v1.1 загружен (day cycle + daily task)');
+// Инициализация при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+  // Обновить daily_task на главной
+  updateDailyTaskUI();
+});
+
+console.log('✅ App v1.2 загружен (day cycle + daily task + resources + cross-recommendations)');

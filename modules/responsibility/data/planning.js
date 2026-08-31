@@ -1,1 +1,223 @@
-window.SOS_REGISTER_QUIZ({"meta": {"module": "responsibility", "category": "planning", "version": "1.0.0", "lang": "ru", "title": "📅 Планирование", "description": "Система управления временем и задачами", "icon": "📅", "color": "#3b82f6"}, "questions": [{"id": "planning_style", "type": "single", "text": "Как вы обычно планируете день?", "required": true, "options": [{"id": "list", "label": "📝 Списки дел", "tags": ["list"]}, {"id": "calendar", "label": "📅 Календарь", "tags": ["calendar"]}, {"id": "memory", "label": "🧠 В голове", "tags": ["memory"]}, {"id": "chaos", "label": "🌪️ Никак", "tags": ["chaos"]}]}, {"id": "procrastination", "type": "single", "text": "Что чаще всего откладываете?", "required": true, "options": [{"id": "big_tasks", "label": "🏔️ Большие задачи", "tags": ["big"]}, {"id": "unpleasant", "label": "😒 Неприятные", "tags": ["bad"]}, {"id": "unclear", "label": "🌫️ Непонятные", "tags": ["unclear"]}, {"id": "boring", "label": "😴 Скучные", "tags": ["boring"]}]}], "solutions": [{"id": "two_minute_rule", "title": "⏱️ Правило 2 минут", "description": "Если задача занимает < 2 минут — делайте сразу.", "conditions": {"planning_style": ["list", "calendar", "memory", "chaos"], "procrastination": ["big_tasks", "unpleasant", "unclear", "boring"]}, "scoring": {"priority": "fast", "reliability": "high"}, "time_estimate": "Сразу", "yield_estimate": "Меньше откладываний", "tags": ["2min", "action"], "steps": ["Сделайте список дел на сегодня", "Выберите 3 самых важных", "Примените правило 2 минут к мелочам", "Большие задачи разбейте на шаги по 25 минут"], "warnings": ["НЕ планируйте больше 3 важных дел в день", "НЕ откладывайте мелочи — они накапливаются"], "daily_action": "Сегодня: сделайте всё, что занимает < 2 минут, сразу"}]});
+// modules/responsibility/data/planning.js
+// ============================================================
+// ПЛАНИРОВАНИЕ — ИСПРАВЛЕННАЯ ВЕРСИЯ v2.1
+// ============================================================
+
+window.SOS_REGISTER_QUIZ({
+  meta: {
+    module: "responsibility",
+    category: "planning",
+    version: "2.1.0",
+    lang: "ru",
+    title: "📅 Планирование",
+    description: "Ты — стратег. Система управления временем и задачами. Правило 2 минут: если < 2 минут — делай сразу.",
+    icon: "📅",
+    color: "#3b82f6"
+  },
+
+  questions: [
+    // === ВОПРОС 1: Стиль планирования (без условий) ===
+    {
+      id: "planning_style",
+      type: "single",
+      text: "Как ты обычно планируешь свой день?",
+      required: true,
+      options: [
+        { id: "list", label: "📝 Списки дел", tags: ["list"] },
+        { id: "calendar", label: "📅 Календарь", tags: ["calendar"] },
+        { id: "memory", label: "🧠 В голове", tags: ["memory"] },
+        { id: "chaos", label: "🌪️ Никак", tags: ["chaos"] }
+      ]
+    },
+
+    // === ВОПРОС 2: Триггер прокрастинации (УБРАНЫ ИЗБЫТОЧНЫЕ conditions) ===
+    {
+      id: "procrastination",
+      type: "single",
+      text: "Что чаще всего ты откладываешь на потом?",
+      required: true,
+      options: [
+        { id: "big_tasks", label: "🏔️ Большие задачи", tags: ["big"] },
+        { id: "unpleasant", label: "😒 Неприятные", tags: ["bad"] },
+        { id: "unclear", label: "🌫️ Непонятные", tags: ["unclear"] },
+        { id: "boring", label: "😴 Скучные", tags: ["boring"] }
+      ]
+    },
+
+    // === ВОПРОС 3: Глубокая работа ===
+    {
+      id: "deep_work",
+      type: "single",
+      text: "Сколько часов глубокой работы у тебя в день?",
+      required: true,
+      options: [
+        { id: "none_deep", label: "❌ Нет", tags: ["none"] },
+        { id: "1h", label: "🕐 1 час", tags: ["low"] },
+        { id: "2h", label: "🕐🕐 2 часа", tags: ["mid"] },
+        { id: "3h_plus", label: "🕐🕐🕐 3+ часа", tags: ["high"] }
+      ]
+    },
+
+    // === ВОПРОС 4: Главная проблема с планированием ===
+    {
+      id: "planning_problem",
+      type: "single",
+      text: "Что мешает тебе следовать плану?",
+      required: true,
+      options: [
+        { id: "interruptions", label: "🔔 Постоянные прерывания", tags: ["interrupt"] },
+        { id: "perfectionism", label: "🎯 Перфекционизм", tags: ["perfect"] },
+        { id: "overload", label: "📚 Перегрузка", tags: ["overload"] },
+        { id: "energy", label: "😴 Нет энергии", tags: ["energy"] }
+      ]
+    }
+  ],
+
+  solutions: [
+    // === РЕШЕНИЕ 1: Правило 2 минут (теперь это ЧИСТЫЙ FALLBACK) ===
+    {
+      id: "two_minute_rule",
+      title: "⏱️ Правило 2 минут",
+      description: "Ты — исполнитель. Если задача < 2 минут — делай сразу. Не планируй больше 3 важных дел в день. Это меняет всё.",
+      // ✅ УДАЛЕНЫ ВСЕ CONDITIONS (теперь решение появляется ТОЛЬКО как fallback)
+      // В engine.js оно подхватится, если нет точных совпадений
+      conditions: {},
+      scoring: { priority: "fast", reliability: "high" },
+      time_estimate: "Сразу",
+      yield_estimate: "Меньше откладываний и больше завершённых задач",
+      tags: ["2min", "action"],
+      steps: [
+        "Шаг 1: Сделай список дел на сегодня.",
+        "Шаг 2: Выбери 3 самых важных.",
+        "Шаг 3: Примени правило 2 минут к мелочам.",
+        "Шаг 4: Большие задачи разбей на шаги по 25 минут."
+      ],
+      warnings: [
+        "НЕ планируй больше 3 важных дел в день.",
+        "НЕ откладывай мелочи — они накапливаются."
+      ],
+      daily_action: "Сегодня: сделай всё, что занимает < 2 минут, сразу.",
+      resources: [
+        { type: "book", label: "📖 Глубокая работа — Кэл Ньюпорт", url: "#" },
+        { type: "technique", label: "⏱️ Помодоро (25/5)", url: "#" }
+      ]
+    },
+
+    // === РЕШЕНИЕ 2: Защита от прерываний (ДОБАВЛЕН "3h_plus") ===
+    {
+      id: "interruption_protection",
+      title: "🛡️ Защита от прерываний",
+      description: "Ты — хранитель фокуса. Мир не рухнет, если ты не ответишь на сообщение 30 минут.",
+      conditions: {
+        planning_problem: ["interruptions"],
+        deep_work: ["none_deep", "1h", "2h", "3h_plus"] // ✅ ДОБАВЛЕН 3h_plus
+      },
+      scoring: { priority: "medium", reliability: "high" },
+      time_estimate: "1 неделя",
+      yield_estimate: "Увеличение продуктивности на 40%",
+      tags: ["focus", "interruptions"],
+      steps: [
+        "Шаг 1: Установи режим 'Не беспокоить' на 30 минут.",
+        "Шаг 2: Отключи уведомления от соцсетей и почты.",
+        "Шаг 3: Работай в одно и то же время каждый день.",
+        "Шаг 4: Используй наушники или беруши для тишины."
+      ],
+      warnings: [
+        "НЕ бойся казаться недоступным.",
+        "НЕ проверяй телефон каждые 5 минут."
+      ],
+      daily_action: "Сегодня: поработай 30 минут в режиме 'Не беспокоить'.",
+      resources: [
+        { type: "technique", label: "⏰ Техника 'Глубокая работа'", url: "#" }
+      ]
+    },
+
+    // === РЕШЕНИЕ 3: Энергетическое планирование (ДОБАВЛЕН "3h_plus") ===
+    {
+      id: "energy_planning",
+      title: "⚡ Энергетическое планирование",
+      description: "Ты — не робот. Делай сложные задачи на пике энергии, а рутину — на спаде.",
+      conditions: {
+        planning_problem: ["energy"],
+        deep_work: ["none_deep", "1h", "2h", "3h_plus"] // ✅ ДОБАВЛЕН 3h_plus
+      },
+      scoring: { priority: "medium", reliability: "medium" },
+      time_estimate: "1 месяц",
+      yield_estimate: "Эффективное использование энергии",
+      tags: ["energy", "planning"],
+      steps: [
+        "Шаг 1: Определи свои часы пика.",
+        "Шаг 2: Планируй сложные задачи на пик энергии.",
+        "Шаг 3: Делай рутину и звонки в период спада.",
+        "Шаг 4: Каждые 90 минут делай 10-минутный перерыв."
+      ],
+      warnings: [
+        "НЕ планируй сложные задачи, когда нет сил.",
+        "НЕ игнорируй отдых — он восстанавливает энергию."
+      ],
+      daily_action: "Сегодня: определи свой пик энергии и запланируй 1 сложную задачу на это время.",
+      resources: [
+        { type: "book", label: "📖 Глубокая работа — Кэл Ньюпорт", url: "#" },
+        { type: "technique", label: "⏰ Ультрадианные ритмы (90/10)", url: "#" }
+      ]
+    },
+
+    // === РЕШЕНИЕ 4: Достаточно хорошо (НОВОЕ! Для перфекционистов) ===
+    {
+      id: "good_enough",
+      title: "✅ Достаточно хорошо",
+      description: "Ты — завершатель. Перфекционизм убивает действие. Готовый проект лучше, чем идеальный в черновиках.",
+      conditions: {
+        planning_problem: ["perfectionism"]
+      },
+      scoring: { priority: "fast", reliability: "high" },
+      time_estimate: "3 дня",
+      yield_estimate: "Завершённые дела и меньше тревоги",
+      tags: ["perfectionism", "action"],
+      steps: [
+        "Шаг 1: Установи таймер на задачу и остановись, когда время выйдет.",
+        "Шаг 2: Вспомни: '80% результата за 20% времени' (закон Парето).",
+        "Шаг 3: Покажи результат кому-то до того, как он станет 'идеальным'.",
+        "Шаг 4: Заметь, что мир не рухнул от неидеальности."
+      ],
+      warnings: [
+        "НЕ переделывай 10 раз — сделай и отдай.",
+        "НЕ сравнивай свой черновик с чужим финалом."
+      ],
+      daily_action: "Сегодня: заверши задачу, не доводя её до идеала.",
+      resources: [
+        { type: "book", label: "📖 Искусство безделья — Том Ходжкинсон", url: "#" },
+        { type: "technique", label: "⏱️ Закон Парето (80/20)", url: "#" }
+      ]
+    },
+
+    // === РЕШЕНИЕ 5: Жёсткий отсев (НОВОЕ! Для перегруженных) ===
+    {
+      id: "hard_filter",
+      title: "📋 Жёсткий отсев",
+      description: "Ты — капитан. Спасаешь тонущий корабль — сначала выкидывай лишнее. Оставь только 3 дела в день.",
+      conditions: {
+        planning_problem: ["overload"]
+      },
+      scoring: { priority: "fast", reliability: "high" },
+      time_estimate: "1 день",
+      yield_estimate: "Чёткий фокус и снижение тревоги",
+      tags: ["overload", "filter"],
+      steps: [
+        "Шаг 1: Запиши ВСЕ дела, которые висят на тебе.",
+        "Шаг 2: Оставь только 3 самых важных — всё остальное удали или делегируй.",
+        "Шаг 3: Откажись от всего, что не входит в эти 3 дела.",
+        "Шаг 4: Повторяй каждый день — это войдёт в привычку."
+      ],
+      warnings: [
+        "НЕ бойся сказать 'нет' — это твоя защита.",
+        "НЕ пытайся сделать всё — это невозможно."
+      ],
+      daily_action: "Сегодня: выбери 3 самых важных дела и откажись от остальных.",
+      resources: [
+        { type: "book", label: "📖 Эссенциализм — Грег МакКеон", url: "#" },
+        { type: "technique", label: "📋 Матрица Эйзенхауэра", url: "#" }
+      ]
+    }
+  ]
+});
