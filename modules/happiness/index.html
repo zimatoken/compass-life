@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f59e0b">
+  <title>Компас — Счастье</title>
+  <link rel="manifest" href="../../manifest.json">
+  <link rel="apple-touch-icon" href="../../assets/icons/icon-192.png">
+  <link rel="stylesheet" href="../../css/styles.css">
+  <link rel="stylesheet" href="../../css/modules/happiness.css">
+</head>
+<body data-module="happiness">
+  <div class="app">
+    <div class="screen active" id="screen-home">
+      <div class="module-header happiness-header">
+        <div class="module-icon">😊</div>
+        <h1>Счастье</h1>
+        <p class="module-subtitle">Выберите направление</p>
+      </div>
+      <div class="lang-switcher">
+        <button class="lang-btn" onclick="setLang('ru')" id="btn-ru">RU</button>
+        <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+        <button class="theme-btn" onclick="toggleTheme()">🌓</button>
+      </div>
+      <div class="cat-grid">
+        <button class="cat-btn" onclick="startFlow('blockers')">
+          <span class="cat-icon">🚧</span>
+          <span>Блокеры счастья</span>
+        </button>
+        <button class="cat-btn" onclick="startFlow('energy_audit')">
+          <span class="cat-icon">⚡</span>
+          <span>Энергоаудит</span>
+        </button>
+      </div>
+      <div style="text-align:center;padding:16px">
+        <a href="../../index.html" style="color:var(--text2);text-decoration:none;font-size:14px">← Счастье — на главную</a>
+      </div>
+    </div>
+    <div class="screen" id="screen-quiz">
+      <div class="module-header">
+        <div class="module-icon">😊</div>
+        <h1 id="quiz-title">Счастье</h1>
+      </div>
+      <div id="quiz-container" style="padding:0 16px"></div>
+      <div style="padding:16px">
+        <button class="btn-primary" onclick="goHome()" style="background:var(--border);color:var(--text)">← Назад</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script src="../../core/locales.js"></script>
+  <script src="../../core/registry.js"></script>
+  <script src="../../core/theme.js"></script>
+  <script src="../../core/progressEngine.js"></script>
+  <script>
+    function setLang(l) {
+      localStorage.setItem('language', l);
+      window.currentLang = l;
+      location.reload();
+    }
+    window.currentLang = localStorage.getItem('language') || 'ru';
+    document.getElementById('btn-' + window.currentLang).classList.add('active');
+  </script>
+  <script src="data/blockers.js"></script>
+  <script src="data/en/blockers-en.js"></script>
+  <script src="data/energy_audit.js"></script>
+  <script src="data/en/energy_audit-en.js"></script>
+  <script src="../../core/engine.js"></script>
+  <script src="../../core/tracker.js"></script>
+  <script src="../../core/app.js"></script>
+  <script>
+    if('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../../sw.js').then(r => console.log('SW ok', r.scope)).catch(e => console.error('SW err', e));
+    }
+  </script>
+</body>
+</html>

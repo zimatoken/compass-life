@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0c1220">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>КОМПАС ПО ЖИЗНИ — Алгоритмы для развития</title>
+  <meta name="apple-mobile-web-app-title" content="Компас">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192.png">
+  <link rel="stylesheet" href="./css/styles.css">
+  <style>
+    .compass-header { text-align:center; padding:24px 16px 8px; }
+    .compass-header h1 { font-size:28px; letter-spacing:3px; margin:0; }
+    .compass-header .subtitle { font-size:16px; color:var(--text2); margin-top:6px; font-weight:500; }
+    .compass-logo { width:72px; height:72px; margin-bottom:8px; font-size:56px; }
+    .day-cycle-bar { display:flex; gap:6px; overflow-x:auto; padding:12px 16px; margin:0 -4px; }
+    .day-cycle-bar::-webkit-scrollbar { display:none; }
+    .cycle-pill { min-width:80px; text-align:center; padding:8px 10px; border-radius:20px; background:var(--card); border:1px solid var(--border); font-size:12px; white-space:nowrap; opacity:0.6; }
+    .cycle-pill.active { opacity:1; border-color:var(--accent); background:rgba(245,158,11,0.15); font-weight:700; }
+    .cycle-hint { text-align:center; font-size:12px; color:var(--text3); padding:0 16px 8px; }
+    .mod-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:0 16px 16px; }
+    .mod-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:18px 8px; background:var(--card); border:1px solid var(--border); border-radius:16px; text-decoration:none; color:var(--text); transition:all .2s; }
+    .mod-card:hover { transform:translateY(-3px); border-color:var(--accent); }
+    .mod-card .icon { font-size:32px; }
+    .mod-card .label { font-size:13px; font-weight:600; text-align:center; }
+    .daily-task-box { margin:16px; padding:16px; background:linear-gradient(135deg, rgba(245,158,11,0.1), rgba(139,92,246,0.1)); border-radius:16px; border-left:4px solid var(--accent); }
+    .daily-task-box.done { opacity:.6; border-left-color:var(--success); }
+    .daily-task-box .task-header { font-size:13px; color:var(--text2); margin-bottom:8px; }
+    .daily-task-box .task-text { font-weight:600; margin-bottom:12px; }
+    .daily-task-btn { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; border:none; padding:12px 20px; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; width:100%; }
+    .daily-task-btn:disabled { opacity:0.5; cursor:default; }
+    .progress-section { padding:0 16px 16px; }
+    .progress-bar-wrap { height:8px; background:var(--border); border-radius:4px; overflow:hidden; margin-top:8px; }
+    .progress-bar-fill { height:100%; background:linear-gradient(90deg, var(--accent), var(--accent2)); border-radius:4px; width:0%; transition:width .6s ease; }
+    .feedback-block { margin:16px; padding:16px; background:var(--card); border-radius:16px; border:1px solid var(--border); text-align:center; }
+    .feedback-buttons { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:12px; }
+    .feedback-btn { display:inline-flex; align-items:center; gap:6px; padding:10px 20px; border-radius:12px; text-decoration:none; font-weight:600; font-size:14px; color:#fff; transition:all .2s; }
+    .feedback-btn:hover { transform:translateY(-2px); filter:brightness(1.1); }
+    .fb-tg { background:linear-gradient(135deg,#0088cc,#005f8a); }
+    .fb-wa { background:linear-gradient(135deg,#25D366,#128C7E); }
+    .fb-mail { background:linear-gradient(135deg,#f59e0b,#d97706); }
+    .footer { text-align:center; padding:20px 16px; font-size:12px; color:var(--text3); }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="screen active" id="screen-home">
+      <div class="compass-header">
+        <div class="compass-logo">🧭</div>
+        <h1 data-i18n="app_title">КОМПАС ПО ЖИЗНИ</h1>
+        <p class="subtitle" data-i18n="app_subtitle">Алгоритмы для развития</p>
+      </div>
+
+      <div class="day-cycle-bar" id="dayCycleBar"></div>
+      <div class="cycle-hint" id="cycleHint"></div>
+
+      <div class="mod-grid">
+        <a href="./modules/purpose/index.html" class="mod-card" style="border-top:3px solid #f43f5e">
+          <span class="icon">🎯</span>
+          <span class="label" data-i18n="cat_purpose">Призвание</span>
+        </a>
+        <a href="./modules/happiness/index.html" class="mod-card" style="border-top:3px solid #f59e0b">
+          <span class="icon">😊</span>
+          <span class="label" data-i18n="cat_happiness">Счастье</span>
+        </a>
+        <a href="./modules/habits/index.html" class="mod-card" style="border-top:3px solid #8b5cf6">
+          <span class="icon">🔄</span>
+          <span class="label" data-i18n="cat_habits">Привычки</span>
+        </a>
+        <a href="./modules/money/index.html" class="mod-card" style="border-top:3px solid #22c55e">
+          <span class="icon">💰</span>
+          <span class="label" data-i18n="cat_money">Деньги</span>
+        </a>
+        <a href="./modules/responsibility/index.html" class="mod-card" style="border-top:3px solid #3b82f6">
+          <span class="icon">⚡</span>
+          <span class="label" data-i18n="cat_responsibility">Ответственность</span>
+        </a>
+        <a href="./modules/health/index.html" class="mod-card" style="border-top:3px solid #ec4899">
+          <span class="icon">🧘</span>
+          <span class="label" data-i18n="cat_health">Здоровье</span>
+        </a>
+        <a href="./modules/relationships/index.html" class="mod-card" style="border-top:3px solid #06b6d4">
+          <span class="icon">🗣️</span>
+          <span class="label" data-i18n="cat_relationships">Отношения</span>
+        </a>
+        <a href="./modules/creativity/index.html" class="mod-card" style="border-top:3px solid #d946ef">
+          <span class="icon">🎨</span>
+          <span class="label" data-i18n="cat_creativity">Творчество</span>
+        </a>
+        <a href="./modules/learning/index.html" class="mod-card" style="border-top:3px solid #f97316">
+          <span class="icon">📚</span>
+          <span class="label" data-i18n="cat_learning">Обучение</span>
+        </a>
+      </div>
+
+      <div class="daily-task-box" id="dailyTaskBox" style="display:none">
+        <p class="task-header">🎯 <span data-i18n="daily_task_title">Задание на сегодня</span></p>
+        <p class="task-text" id="dailyTaskText">—</p>
+        <button class="daily-task-btn" id="dailyTaskBtn" onclick="completeDailyTask()" data-i18n="daily_task_done">✅ Выполнено</button>
+      </div>
+
+      <div class="progress-section">
+        <p style="font-size:13px;color:var(--text2)" data-i18n="progress_modules">📊 Пройдено модулей</p>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="moduleProgress"></div></div>
+      </div>
+
+      <div class="feedback-block">
+        <p style="color:var(--text2);font-size:14px">💬 <span data-i18n="feedback_title">Есть вопросы или предложения?</span></p>
+        <div class="feedback-buttons">
+          <a href="https://t.me/compass_life_help" target="_blank" rel="noopener" class="feedback-btn fb-tg">💬 Telegram</a>
+          <a href="mailto:compass.life.help@gmail.com" class="feedback-btn fb-mail">📧 Email</a>
+        </div>
+      </div>
+
+      <div class="footer">
+        <span data-i18n="footer_text">v1.1 · Life Compass</span>
+        <span style="display:block;margin-top:4px">📧 compass.life.help@gmail.com</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="./core/locales.js"></script>
+  <script src="./core/registry.js"></script>
+  <script src="./core/theme.js"></script>
+  <script src="./core/progressEngine.js"></script>
+  <script>
+    window.currentLang = localStorage.getItem('language') || 'ru';
+  </script>
+  <script src="./core/engine.js"></script>
+  <script src="./core/tracker.js"></script>
+  <script src="./core/app.js"></script>
+  <script>
+    function renderDayCycle() {
+      const cycle = (typeof getDayCycle === 'function') ? getDayCycle() : null;
+      if(!cycle) return;
+      const bar = document.getElementById('dayCycleBar');
+      const hint = document.getElementById('cycleHint');
+      if(!bar) return;
+      const slots = [
+        { key:'awakening',  h:[6,7,8],      label:'🌅 ' + t('day_cycle_awakening') },
+        { key:'deep',       h:[9,10,11],    label:'☀️ ' + t('day_cycle_deep') },
+        { key:'routine',    h:[12,13],      label:'🍽️ ' + t('day_cycle_routine') },
+        { key:'social',     h:[14,15,16],   label:'🌤️ ' + t('day_cycle_social') },
+        { key:'physical',   h:[17,18],      label:'🌇 ' + t('day_cycle_physical') },
+        { key:'reflect',    h:[19,20,21],   label:'🌙 ' + t('day_cycle_reflect') },
+        { key:'rest',       h:[22,23,0,1,2,3,4,5], label:'😴 ' + t('day_cycle_rest') }
+      ];
+      bar.innerHTML = slots.map(s => {
+        const active = s.h.includes(new Date().getHours()) ? 'active' : '';
+        return `<div class="cycle-pill ${active}">${s.label}</div>`;
+      }).join('');
+      if(hint) hint.textContent = t('day_cycle_hint_' + cycle.type) || '';
+    }
+    renderDayCycle();
+    setInterval(renderDayCycle, 60000);
+
+    function updateModuleProgress() {
+      const profile = (typeof ProgressEngine !== 'undefined') ? ProgressEngine.getCrossModuleProfile() : { completed:0, total:5 };
+      const pct = Math.round((profile.completed / profile.total) * 100);
+      const fill = document.getElementById('moduleProgress');
+      if(fill) fill.style.width = pct + '%';
+    }
+    updateModuleProgress();
+
+    function renderDailyTask() {
+      const box = document.getElementById('dailyTaskBox');
+      const text = document.getElementById('dailyTaskText');
+      const task = (typeof ProgressEngine !== 'undefined') ? ProgressEngine.getDailyAction() : null;
+      if(task && text) {
+        text.textContent = task.text || task;
+        box.style.display = 'block';
+      }
+    }
+    renderDailyTask();
+
+    if('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').then(r => console.log('SW ok', r.scope)).catch(e => console.error('SW err', e));
+    }
+  </script>
+</body>
+</html>
