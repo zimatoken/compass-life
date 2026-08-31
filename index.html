@@ -10,120 +10,116 @@
   <meta name="apple-mobile-web-app-title" content="Компас">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./assets/icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./css/styles.css">
-  <style>
-    .compass-header { text-align:center; padding:24px 16px 8px; }
-    .compass-header h1 { font-size:28px; letter-spacing:3px; margin:0; }
-    .compass-header .subtitle { font-size:16px; color:var(--text2); margin-top:6px; font-weight:500; }
-    .compass-logo { width:72px; height:72px; margin-bottom:8px; font-size:56px; }
-    .day-cycle-bar { display:flex; gap:6px; overflow-x:auto; padding:12px 16px; margin:0 -4px; }
-    .day-cycle-bar::-webkit-scrollbar { display:none; }
-    .cycle-pill { min-width:80px; text-align:center; padding:8px 10px; border-radius:20px; background:var(--card); border:1px solid var(--border); font-size:12px; white-space:nowrap; opacity:0.6; }
-    .cycle-pill.active { opacity:1; border-color:var(--accent); background:rgba(245,158,11,0.15); font-weight:700; }
-    .cycle-hint { text-align:center; font-size:12px; color:var(--text3); padding:0 16px 8px; }
-    .mod-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:0 16px 16px; }
-    .mod-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:18px 8px; background:var(--card); border:1px solid var(--border); border-radius:16px; text-decoration:none; color:var(--text); transition:all .2s; }
-    .mod-card:hover { transform:translateY(-3px); border-color:var(--accent); }
-    .mod-card .icon { font-size:32px; }
-    .mod-card .label { font-size:13px; font-weight:600; text-align:center; }
-    .daily-task-box { margin:16px; padding:16px; background:linear-gradient(135deg, rgba(245,158,11,0.1), rgba(139,92,246,0.1)); border-radius:16px; border-left:4px solid var(--accent); }
-    .daily-task-box.done { opacity:.6; border-left-color:var(--success); }
-    .daily-task-box .task-header { font-size:13px; color:var(--text2); margin-bottom:8px; }
-    .daily-task-box .task-text { font-weight:600; margin-bottom:12px; }
-    .daily-task-btn { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; border:none; padding:12px 20px; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; width:100%; }
-    .daily-task-btn:disabled { opacity:0.5; cursor:default; }
-    .progress-section { padding:0 16px 16px; }
-    .progress-bar-wrap { height:8px; background:var(--border); border-radius:4px; overflow:hidden; margin-top:8px; }
-    .progress-bar-fill { height:100%; background:linear-gradient(90deg, var(--accent), var(--accent2)); border-radius:4px; width:0%; transition:width .6s ease; }
-    .feedback-block { margin:16px; padding:16px; background:var(--card); border-radius:16px; border:1px solid var(--border); text-align:center; }
-    .feedback-buttons { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:12px; }
-    .feedback-btn { display:inline-flex; align-items:center; gap:6px; padding:10px 20px; border-radius:12px; text-decoration:none; font-weight:600; font-size:14px; color:#fff; transition:all .2s; }
-    .feedback-btn:hover { transform:translateY(-2px); filter:brightness(1.1); }
-    .fb-tg { background:linear-gradient(135deg,#0088cc,#005f8a); }
-    .fb-wa { background:linear-gradient(135deg,#25D366,#128C7E); }
-    .fb-mail { background:linear-gradient(135deg,#f59e0b,#d97706); }
-    .footer { text-align:center; padding:20px 16px; font-size:12px; color:var(--text3); }
-  </style>
 </head>
 <body>
   <div class="app">
     <div class="screen active" id="screen-home">
-      <div class="compass-header">
-        <div class="compass-logo">🧭</div>
+      <!-- ===== HEADER ===== -->
+      <header class="module-header">
+        <span class="module-icon">🧭</span>
         <h1 data-i18n="app_title">КОМПАС ПО ЖИЗНИ</h1>
-        <p class="subtitle" data-i18n="app_subtitle">Алгоритмы для развития</p>
+        <p class="module-subtitle" data-i18n="app_subtitle">Алгоритмы для развития</p>
+      </header>
+
+      <!-- ===== ДЕНЬ ЦИКЛА ===== -->
+      <div class="day-cycle" id="dayCycleBar"></div>
+      <p class="cycle-hint" id="cycleHint"></p>
+
+      <!-- ===== СЕТКА МОДУЛЕЙ (9) ===== -->
+      <div class="cat-grid mod-grid">
+        <a href="./modules/purpose/index.html" class="cat-btn mod-card">
+          <span class="cat-icon">🎯</span>
+          <span class="cat-title" data-i18n="cat_purpose">Призвание</span>
+          <span class="cat-subtitle" data-i18n="cat_purpose_sub">Найди своё направление</span>
+        </a>
+        <a href="./modules/happiness/index.html" class="cat-btn mod-card">
+          <span class="cat-icon">😊</span>
+          <span class="cat-title" data-i18n="cat_happiness">Счастье</span>
+          <span class="cat-subtitle" data-i18n="cat_happiness_sub">Построй жизнь для себя</span>
+        </a>
+        <a href="./modules/habits/index.html" class="cat-btn mod-card">
+          <span class="cat-icon">🔄</span>
+          <span class="cat-title" data-i18n="cat_habits">Привычки</span>
+          <span class="cat-subtitle" data-i18n="cat_habits_sub">Маленькие действия каждый день</span>
+        </a>
+        <a href="./modules/money/index.html" class="cat-btn mod-card">
+          <span class="cat-icon">💰</span>
+          <span class="cat-title" data-i18n="cat_money">Деньги</span>
+          <span class="cat-subtitle" data-i18n="cat_money_sub">Управляй финансами</span>
+        </a>
+        <a href="./modules/responsibility/index.html" class="cat-btn mod-card">
+          <span class="cat-icon">⚡</span>
+          <span class="cat-title" data-i18n="cat_responsibility">Ответственность</span>
+          <span class="cat-subtitle" data-i18n="cat_responsibility_sub">Будь хозяином своей жизни</span>
+        </a>
+        <a href="./modules/health/index.html" class="cat-btn mod-card">
+          <span class="cat-icon">🧘</span>
+          <span class="cat-title" data-i18n="cat_health">Здоровье</span>
+          <span class="cat-subtitle" data-i18n="cat_health_sub">Заботься о теле и духе</span>
+        </a>
+        <a href="./modules/relationships/index.html" class="cat-btn mod-card">
+          <span class="cat-icon">🗣️</span>
+          <span class="cat-title" data-i18n="cat_relationships">Отношения</span>
+          <span class="cat-subtitle" data-i18n="cat_relationships_sub">Строй глубокие связи</span>
+        </a>
+        <a href="./modules/creativity/index.html" class="cat-btn mod-card">
+          <span class="cat-icon">🎨</span>
+          <span class="cat-title" data-i18n="cat_creativity">Творчество</span>
+          <span class="cat-subtitle" data-i18n="cat_creativity_sub">Раскрой свой талант</span>
+        </a>
+        <a href="./modules/learning/index.html" class="cat-btn mod-card">
+          <span class="cat-icon">📚</span>
+          <span class="cat-title" data-i18n="cat_learning">Обучение</span>
+          <span class="cat-subtitle" data-i18n="cat_learning_sub">Учись каждый день</span>
+        </a>
       </div>
 
-      <div class="day-cycle-bar" id="dayCycleBar"></div>
-      <div class="cycle-hint" id="cycleHint"></div>
-
-      <div class="mod-grid">
-        <a href="./modules/purpose/index.html" class="mod-card" style="border-top:3px solid #f43f5e">
-          <span class="icon">🎯</span>
-          <span class="label" data-i18n="cat_purpose">Призвание</span>
-        </a>
-        <a href="./modules/happiness/index.html" class="mod-card" style="border-top:3px solid #f59e0b">
-          <span class="icon">😊</span>
-          <span class="label" data-i18n="cat_happiness">Счастье</span>
-        </a>
-        <a href="./modules/habits/index.html" class="mod-card" style="border-top:3px solid #8b5cf6">
-          <span class="icon">🔄</span>
-          <span class="label" data-i18n="cat_habits">Привычки</span>
-        </a>
-        <a href="./modules/money/index.html" class="mod-card" style="border-top:3px solid #22c55e">
-          <span class="icon">💰</span>
-          <span class="label" data-i18n="cat_money">Деньги</span>
-        </a>
-        <a href="./modules/responsibility/index.html" class="mod-card" style="border-top:3px solid #3b82f6">
-          <span class="icon">⚡</span>
-          <span class="label" data-i18n="cat_responsibility">Ответственность</span>
-        </a>
-        <a href="./modules/health/index.html" class="mod-card" style="border-top:3px solid #ec4899">
-          <span class="icon">🧘</span>
-          <span class="label" data-i18n="cat_health">Здоровье</span>
-        </a>
-        <a href="./modules/relationships/index.html" class="mod-card" style="border-top:3px solid #06b6d4">
-          <span class="icon">🗣️</span>
-          <span class="label" data-i18n="cat_relationships">Отношения</span>
-        </a>
-        <a href="./modules/creativity/index.html" class="mod-card" style="border-top:3px solid #d946ef">
-          <span class="icon">🎨</span>
-          <span class="label" data-i18n="cat_creativity">Творчество</span>
-        </a>
-        <a href="./modules/learning/index.html" class="mod-card" style="border-top:3px solid #f97316">
-          <span class="icon">📚</span>
-          <span class="label" data-i18n="cat_learning">Обучение</span>
-        </a>
-      </div>
-
-      <div class="daily-task-box" id="dailyTaskBox" style="display:none">
-        <p class="task-header">🎯 <span data-i18n="daily_task_title">Задание на сегодня</span></p>
-        <p class="task-text" id="dailyTaskText">—</p>
-        <button class="daily-task-btn" id="dailyTaskBtn" onclick="completeDailyTask()" data-i18n="daily_task_done">✅ Выполнено</button>
-      </div>
-
-      <div class="progress-section">
-        <p style="font-size:13px;color:var(--text2)" data-i18n="progress_modules">📊 Пройдено модулей</p>
-        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="moduleProgress"></div></div>
-      </div>
-
-      <div class="feedback-block">
-        <p style="color:var(--text2);font-size:14px">💬 <span data-i18n="feedback_title">Есть вопросы или предложения?</span></p>
-        <div class="feedback-buttons">
-          <a href="https://t.me/compass_life_help" target="_blank" rel="noopener" class="feedback-btn fb-tg">💬 Telegram</a>
-          <a href="mailto:compass.life.help@gmail.com" class="feedback-btn fb-mail">📧 Email</a>
+      <!-- ===== ПРОГРЕСС ===== -->
+      <div class="progress-block">
+        <span class="progress-icon">🧭</span>
+        <div class="progress-info">
+          <div class="progress-title" data-i18n="progress_modules">📊 Мой путь</div>
+          <div class="progress-text" id="progressText">0 из 9 пройдено</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="moduleProgress" style="width:0%"></div>
+          </div>
         </div>
       </div>
 
-      <div class="footer">
-        <span data-i18n="footer_text">v1.1 · Life Compass</span>
-        <span style="display:block;margin-top:4px">📧 compass.life.help@gmail.com</span>
+      <!-- ===== ЕЖЕДНЕВНОЕ ЗАДАНИЕ ===== -->
+      <div class="daily-task-box" id="dailyTaskBox" style="display:none">
+        <div class="daily-task-header">
+          <span class="daily-task-icon">🎯</span>
+          <span class="daily-task-title" data-i18n="daily_task_title">Задание на сегодня</span>
+        </div>
+        <p class="daily-task-text" id="dailyTaskText">—</p>
+        <button class="daily-task-btn" id="dailyTaskBtn" onclick="completeDailyTask()" data-i18n="daily_task_done">✅ Выполнено</button>
       </div>
+
+      <!-- ===== ОБРАТНАЯ СВЯЗЬ ===== -->
+      <div class="feedback-block">
+        <p class="feedback-title">💬 <span data-i18n="feedback_title">Есть вопросы или предложения?</span></p>
+        <div class="feedback-buttons">
+          <a href="https://t.me/compass_life_help" target="_blank" rel="noopener" class="feedback-btn feedback-telegram">💬 Telegram</a>
+          <a href="mailto:compass.life.help@gmail.com" class="feedback-btn feedback-email">📧 Email</a>
+        </div>
+      </div>
+
+      <!-- ===== ФУТЕР ===== -->
+      <footer class="footer">
+        <span data-i18n="footer_text">v2.0 · Life Compass</span>
+        <span style="display:block;margin-top:var(--space-2)">📧 compass.life.help@gmail.com</span>
+      </footer>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
+  <!-- ===== СКРИПТЫ ===== -->
   <script src="./core/locales.js"></script>
   <script src="./core/registry.js"></script>
   <script src="./core/theme.js"></script>
@@ -134,52 +130,93 @@
   <script src="./core/engine.js"></script>
   <script src="./core/tracker.js"></script>
   <script src="./core/app.js"></script>
+
   <script>
+    // ===== ЦИКЛ ДНЯ =====
     function renderDayCycle() {
       const cycle = (typeof getDayCycle === 'function') ? getDayCycle() : null;
-      if(!cycle) return;
+      if (!cycle) return;
       const bar = document.getElementById('dayCycleBar');
       const hint = document.getElementById('cycleHint');
-      if(!bar) return;
+      if (!bar) return;
+
       const slots = [
-        { key:'awakening',  h:[6,7,8],      label:'🌅 ' + t('day_cycle_awakening') },
-        { key:'deep',       h:[9,10,11],    label:'☀️ ' + t('day_cycle_deep') },
-        { key:'routine',    h:[12,13],      label:'🍽️ ' + t('day_cycle_routine') },
-        { key:'social',     h:[14,15,16],   label:'🌤️ ' + t('day_cycle_social') },
-        { key:'physical',   h:[17,18],      label:'🌇 ' + t('day_cycle_physical') },
-        { key:'reflect',    h:[19,20,21],   label:'🌙 ' + t('day_cycle_reflect') },
-        { key:'rest',       h:[22,23,0,1,2,3,4,5], label:'😴 ' + t('day_cycle_rest') }
+        { key: 'awakening', h: [6,7,8], label: t('day_cycle_awakening') },
+        { key: 'deep', h: [9,10,11], label: t('day_cycle_deep') },
+        { key: 'routine', h: [12,13], label: t('day_cycle_routine') },
+        { key: 'social', h: [14,15,16], label: t('day_cycle_social') },
+        { key: 'physical', h: [17,18], label: t('day_cycle_physical') },
+        { key: 'reflect', h: [19,20,21], label: t('day_cycle_reflect') },
+        { key: 'rest', h: [22,23,0,1,2,3,4,5], label: t('day_cycle_rest') }
       ];
+
+      const currentHour = new Date().getHours();
       bar.innerHTML = slots.map(s => {
-        const active = s.h.includes(new Date().getHours()) ? 'active' : '';
-        return `<div class="cycle-pill ${active}">${s.label}</div>`;
+        const active = s.h.includes(currentHour) ? 'active' : '';
+        return `<span class="cycle-pill ${active}">${s.label}</span>`;
       }).join('');
-      if(hint) hint.textContent = t('day_cycle_hint_' + cycle.type) || '';
+
+      if (hint) {
+        const hintKey = 'day_cycle_hint_' + cycle.type;
+        hint.textContent = t(hintKey) || '';
+      }
     }
+
     renderDayCycle();
     setInterval(renderDayCycle, 60000);
 
-    function updateModuleProgress() {
-      const profile = (typeof ProgressEngine !== 'undefined') ? ProgressEngine.getCrossModuleProfile() : { completed:0, total:5 };
+    // ===== ПРОГРЕСС =====
+    function updateProgress() {
+      const profile = (typeof ProgressEngine !== 'undefined')
+        ? ProgressEngine.getCrossModuleProfile()
+        : { completed: 0, total: 9 };
       const pct = Math.round((profile.completed / profile.total) * 100);
       const fill = document.getElementById('moduleProgress');
-      if(fill) fill.style.width = pct + '%';
+      const text = document.getElementById('progressText');
+      if (fill) fill.style.width = pct + '%';
+      if (text) text.textContent = `${profile.completed} из ${profile.total} пройдено`;
     }
-    updateModuleProgress();
+    updateProgress();
 
+    // ===== ЕЖЕДНЕВНОЕ ЗАДАНИЕ =====
     function renderDailyTask() {
       const box = document.getElementById('dailyTaskBox');
       const text = document.getElementById('dailyTaskText');
+      const btn = document.getElementById('dailyTaskBtn');
       const task = (typeof ProgressEngine !== 'undefined') ? ProgressEngine.getDailyAction() : null;
-      if(task && text) {
-        text.textContent = task.text || task;
+      if (task && text) {
+        text.textContent = typeof task === 'string' ? task : (task.text || '');
         box.style.display = 'block';
+        // Проверим, выполнено ли уже сегодня
+        const today = new Date().toDateString();
+        const doneKey = 'compass_task_daily_' + today;
+        if (localStorage.getItem(doneKey)) {
+          btn.disabled = true;
+          btn.textContent = t('daily_task_done') || '✅ Выполнено';
+          box.classList.add('done');
+        } else {
+          btn.disabled = false;
+          btn.textContent = t('daily_task_done') || '✅ Выполнено';
+          box.classList.remove('done');
+        }
       }
     }
     renderDailyTask();
 
-    if('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').then(r => console.log('SW ok', r.scope)).catch(e => console.error('SW err', e));
+    // ===== ОБРАБОТЧИК ВЫПОЛНЕНИЯ ЗАДАНИЯ =====
+    window.completeDailyTask = function() {
+      if (typeof ProgressEngine !== 'undefined') {
+        ProgressEngine.completeTask('daily');
+        renderDailyTask();
+        if (typeof showToast === 'function') showToast('✅ Задание выполнено!');
+      }
+    };
+
+    // ===== SERVICE WORKER =====
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js')
+        .then(r => console.log('✅ SW registered:', r.scope))
+        .catch(e => console.error('❌ SW registration failed:', e));
     }
   </script>
 </body>

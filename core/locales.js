@@ -1,6 +1,6 @@
 // core/locales.js
 // ============================================================
-// ЛОКАЛИЗАЦИЯ — КОМПАС ПО ЖИЗНИ v2.0
+// ЛОКАЛИЗАЦИЯ — КОМПАС ПО ЖИЗНИ v2.1
 // ============================================================
 
 const LOCALES = {
@@ -23,6 +23,17 @@ const LOCALES = {
     cat_relationships: "🗣️ Отношения",
     cat_creativity: "🎨 Творчество",
     cat_learning: "📚 Обучение",
+
+    // === ПОДЗАГОЛОВКИ МОДУЛЕЙ (subtitle) ===
+    cat_purpose_sub: "Найди своё направление",
+    cat_happiness_sub: "Построй жизнь для себя",
+    cat_habits_sub: "Маленькие действия каждый день",
+    cat_money_sub: "Управляй финансами",
+    cat_responsibility_sub: "Будь хозяином своей жизни",
+    cat_health_sub: "Заботься о теле и духе",
+    cat_relationships_sub: "Строй глубокие связи",
+    cat_creativity_sub: "Раскрой свой талант",
+    cat_learning_sub: "Учись каждый день",
 
     // === ОБЩИЕ ===
     back: "← Назад",
@@ -109,6 +120,17 @@ const LOCALES = {
     cat_creativity: "🎨 Creativity",
     cat_learning: "📚 Learning",
 
+    // === MODULE SUBTITLES ===
+    cat_purpose_sub: "Find your direction",
+    cat_happiness_sub: "Build a life for yourself",
+    cat_habits_sub: "Small actions every day",
+    cat_money_sub: "Take control of your finances",
+    cat_responsibility_sub: "Be the master of your life",
+    cat_health_sub: "Care for body and mind",
+    cat_relationships_sub: "Build deep connections",
+    cat_creativity_sub: "Unlock your talent",
+    cat_learning_sub: "Learn something new every day",
+
     // === COMMON ===
     back: "← Back",
     next: "Next",
@@ -192,5 +214,5 @@ function t(key, params) {
 
 window.t = t;
 
-console.log('✅ Локализации v2.0 загружены');
+console.log('✅ Локализации v2.1 загружены');
 console.log('🌍 Доступные языки:', Object.keys(LOCALES).join(', '));
