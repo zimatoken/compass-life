@@ -1,12 +1,132 @@
 {
-  "name": "КОМПАС ПО ЖИЗНИ",
+  "name": "🧭 КОМПАС ПО ЖИЗНИ — Алгоритмы для развития",
   "short_name": "Компас",
+  "description": "Интерактивный гид по 8 сферам жизни: призвание, счастье, здоровье, деньги, отношения, творчество, обучение, ответственность",
   "start_url": "/compass-life/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0c1220",
   "theme_color": "#0c1220",
+  "categories": ["lifestyle", "health", "education", "productivity", "personal-development"],
+  "lang": "ru",
+  "dir": "ltr",
   "icons": [
-    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
-  ]
+    {
+      "src": "assets/icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/screenshots/home.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "label": "Главный экран КОМПАС ПО ЖИЗНИ"
+    },
+    {
+      "src": "assets/screenshots/quiz.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "label": "Прохождение квиза"
+    },
+    {
+      "src": "assets/screenshots/results.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "label": "Результаты квиза"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "🎯 Призвание",
+      "short_name": "Призвание",
+      "description": "Узнай своё призвание",
+      "url": "/compass-life/modules/purpose/index.html",
+      "icons": [
+        { "src": "assets/icons/shortcut-purpose.png", "sizes": "96x96", "type": "image/png" }
+      ]
+    },
+    {
+      "name": "😊 Счастье",
+      "short_name": "Счастье",
+      "description": "Диагностика блоков счастья",
+      "url": "/compass-life/modules/happiness/index.html",
+      "icons": [
+        { "src": "assets/icons/shortcut-happiness.png", "sizes": "96x96", "type": "image/png" }
+      ]
+    },
+    {
+      "name": "🧘 Здоровье",
+      "short_name": "Здоровье",
+      "description": "Протоколы питания и сна",
+      "url": "/compass-life/modules/health/index.html",
+      "icons": [
+        { "src": "assets/icons/shortcut-health.png", "sizes": "96x96", "type": "image/png" }
+      ]
+    },
+    {
+      "name": "💰 Деньги",
+      "short_name": "Деньги",
+      "description": "Аудит бюджета",
+      "url": "/compass-life/modules/money/index.html",
+      "icons": [
+        { "src": "assets/icons/shortcut-money.png", "sizes": "96x96", "type": "image/png" }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "scope": "/compass-life/",
+  "display_override": ["standalone", "browser"],
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": "auto"
+  },
+  "edge_side_panel": {
+    "preferred_width": 480
+  }
 }

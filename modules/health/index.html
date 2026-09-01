@@ -3,72 +3,451 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#ec4899">
-  <title>Компас — Здоровье</title>
+  <meta name="theme-color" content="#ec4899" id="themeColorMeta">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>🧘 КОМПАС — Здоровье</title>
+  <meta name="apple-mobile-web-app-title" content="Компас">
   <link rel="manifest" href="../../manifest.json">
   <link rel="apple-touch-icon" href="../../assets/icons/icon-192.png">
   <link rel="stylesheet" href="../../css/styles.css">
   <link rel="stylesheet" href="../../css/modules/health.css">
+  
+  <style>
+    /* ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ МОДУЛЯ ===== */
+    .module-header {
+      text-align: center;
+      padding: 20px 16px 8px;
+    }
+    
+    .module-header .module-icon {
+      font-size: 48px;
+    }
+    
+    .module-header h1 {
+      font-size: 28px;
+      margin: 4px 0;
+      font-weight: 800;
+      color: var(--text);
+    }
+    
+    .module-header .module-subtitle {
+      font-size: 15px;
+      color: var(--text2);
+      margin: 0;
+    }
+    
+    .lang-switcher {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      padding: 8px 16px;
+      flex-wrap: wrap;
+    }
+    
+    .lang-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text2);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .lang-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+    }
+    
+    .lang-btn.active {
+      border-color: #ec4899;
+      color: #ec4899;
+      font-weight: 600;
+    }
+    
+    .theme-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text2);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .theme-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+    }
+    
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 0 16px 16px;
+    }
+    
+    .cat-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 20px 12px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      min-height: 100px;
+      text-align: center;
+    }
+    
+    .cat-btn:hover {
+      transform: translateY(-3px);
+      border-color: #ec4899;
+      box-shadow: 0 4px 20px rgba(236, 72, 153, 0.15);
+    }
+    
+    .cat-btn:active {
+      transform: scale(0.97);
+    }
+    
+    .cat-btn .cat-icon {
+      font-size: 32px;
+    }
+    
+    .cat-btn .cat-badge {
+      font-size: 11px;
+      background: #22c55e;
+      color: #fff;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+    
+    /* ===== КВИЗ ===== */
+    .quiz-back {
+      padding: 16px;
+      text-align: center;
+    }
+    
+    .quiz-back .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text2);
+      padding: 10px 24px;
+      border-radius: 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .quiz-back .btn-secondary:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+    }
+    
+    /* ===== СТАТИСТИКА НА ГЛАВНОЙ ===== */
+    .stats-section {
+      margin: 0 16px 16px;
+      padding: 16px;
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+    
+    .stats-section h3 {
+      font-size: 14px;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 12px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    
+    .stats-item {
+      text-align: center;
+      padding: 8px;
+      background: var(--bg);
+      border-radius: 10px;
+    }
+    
+    .stats-item .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    
+    .stats-item .stat-label {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 2px;
+    }
+    
+    /* ===== АДАПТИВ ===== */
+    @media (max-width: 480px) {
+      .cat-grid {
+        gap: 8px;
+      }
+      .cat-btn {
+        padding: 16px 8px;
+        min-height: 80px;
+        font-size: 13px;
+      }
+      .cat-btn .cat-icon {
+        font-size: 28px;
+      }
+      .module-header h1 {
+        font-size: 24px;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+      }
+      .stats-item .stat-value {
+        font-size: 17px;
+      }
+    }
+    
+    @media (max-width: 360px) {
+      .cat-grid {
+        gap: 6px;
+      }
+      .cat-btn {
+        padding: 12px 6px;
+        min-height: 70px;
+        font-size: 12px;
+      }
+      .cat-btn .cat-icon {
+        font-size: 22px;
+      }
+      .module-header h1 {
+        font-size: 20px;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+      }
+      .stats-item .stat-value {
+        font-size: 15px;
+      }
+    }
+  </style>
 </head>
 <body data-module="health">
   <div class="app">
+    <!-- ===== ЭКРАН ГЛАВНОЙ ===== -->
     <div class="screen active" id="screen-home">
-      <div class="module-header health-header">
+      <div class="module-header">
         <div class="module-icon">🧘</div>
-        <h1>Здоровье</h1>
-        <p class="module-subtitle">Выберите направление</p>
+        <h1 data-i18n="health_title">Здоровье</h1>
+        <p class="module-subtitle" data-i18n="health_subtitle">Выберите направление</p>
       </div>
+
       <div class="lang-switcher">
-        <button class="lang-btn" onclick="setLang('ru')" id="btn-ru">RU</button>
-        <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
-        <button class="theme-btn" onclick="toggleTheme()">🌓</button>
+        <button class="lang-btn active" data-lang="ru" onclick="setLang('ru')">🇷🇺 RU</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">🇬🇧 EN</button>
+        <button class="theme-btn" onclick="window.toggleTheme && window.toggleTheme()">🌙</button>
       </div>
+
       <div class="cat-grid">
+        <!-- Сон -->
         <button class="cat-btn" onclick="startFlow('sleep')">
           <span class="cat-icon">😴</span>
-          <span>Сон</span>
+          <span data-i18n="cat_sleep">Сон</span>
         </button>
+        
+        <!-- Питание -->
         <button class="cat-btn" onclick="startFlow('nutrition')">
           <span class="cat-icon">🥗</span>
-          <span>Питание</span>
+          <span data-i18n="cat_nutrition">Питание</span>
+        </button>
+        
+        <!-- Движение (заглушка) -->
+        <button class="cat-btn" onclick="showToast('🔄 В разработке')" style="opacity:0.6">
+          <span class="cat-icon">🏃</span>
+          <span data-i18n="cat_movement">Движение</span>
+        </button>
+        
+        <!-- Стресс (заглушка) -->
+        <button class="cat-btn" onclick="showToast('🔄 В разработке')" style="opacity:0.6">
+          <span class="cat-icon">🧠</span>
+          <span data-i18n="cat_stress">Стресс</span>
         </button>
       </div>
-      <div style="text-align:center;padding:16px">
-        <a href="../../index.html" style="color:var(--text2);text-decoration:none;font-size:14px">← Здоровье — на главную</a>
+
+      <!-- Статистика -->
+      <div class="stats-section" id="statsSection">
+        <h3 data-i18n="stats_title">📊 Ваша статистика</h3>
+        <div class="stats-grid" id="statsGrid">
+          <div class="stats-item">
+            <div class="stat-value" id="statSleep">-</div>
+            <div class="stat-label" data-i18n="stat_sleep">Качество сна</div>
+          </div>
+          <div class="stats-item">
+            <div class="stat-value" id="statEnergy">-</div>
+            <div class="stat-label" data-i18n="stat_energy">Энергия</div>
+          </div>
+          <div class="stats-item">
+            <div class="stat-value" id="statProgress">-</div>
+            <div class="stat-label" data-i18n="stat_progress">Прогресс</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;padding:16px 0 24px">
+        <a href="../../index.html" style="color:var(--text2);text-decoration:none;font-size:14px;transition:color 0.2s" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">
+          ← <span data-i18n="back_home">На главную</span>
+        </a>
       </div>
     </div>
+
+    <!-- ===== ЭКРАН КВИЗА ===== -->
     <div class="screen" id="screen-quiz">
       <div class="module-header">
         <div class="module-icon">🧘</div>
-        <h1 id="quiz-title">Здоровье</h1>
+        <h1 id="quiz-title" data-i18n="health_title">Здоровье</h1>
+        <p class="module-subtitle" id="quiz-subtitle" data-i18n="quiz_in_progress">Прохождение квиза</p>
       </div>
+
       <div id="quiz-container" style="padding:0 16px"></div>
-      <div style="padding:16px">
-        <button class="btn-primary" onclick="goHome()" style="background:var(--border);color:var(--text)">← Назад</button>
+
+      <div class="quiz-back">
+        <button class="btn-secondary" onclick="goHome()">← <span data-i18n="back">Назад</span></button>
       </div>
     </div>
   </div>
+
   <div class="toast" id="toast"></div>
+
+  <!-- ===== SCRIPTS ===== -->
   <script src="../../core/locales.js"></script>
   <script src="../../core/registry.js"></script>
   <script src="../../core/theme.js"></script>
   <script src="../../core/progressEngine.js"></script>
+  
   <script>
-    function setLang(l) { localStorage.setItem('language', l); window.currentLang = l; location.reload(); }
-    window.currentLang = localStorage.getItem('language') || 'ru';
-    document.getElementById('btn-' + window.currentLang).classList.add('active');
+    // ===== УСТАНОВКА ЯЗЫКА =====
+    function setLang(l) {
+      localStorage.setItem('compass_lang', l);
+      window.currentLang = l;
+      location.reload();
+    }
+    
+    window.currentLang = localStorage.getItem('compass_lang') || 'ru';
+    
+    // Активируем кнопку текущего языка
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === window.currentLang);
+      });
+    });
   </script>
+
+  <!-- ===== ДАННЫЕ КВИЗОВ ===== -->
   <script src="data/sleep.js"></script>
   <script src="data/en/sleep-en.js"></script>
   <script src="data/nutrition.js"></script>
   <script src="data/en/nutrition-en.js"></script>
+
+  <!-- ===== ЯДРО ===== -->
   <script src="../../core/engine.js"></script>
   <script src="../../core/tracker.js"></script>
   <script src="../../core/app.js"></script>
+
   <script>
-    if('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('../../sw.js').then(r => console.log('SW ok', r.scope)).catch(e => console.error('SW err', e));
+    // ===== SERVICE WORKER =====
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../../sw.js')
+        .then(r => console.log('✅ SW ok', r.scope))
+        .catch(e => console.error('❌ SW err', e));
     }
+
+    // ===== ОБНОВЛЕНИЕ МЕТА-ТЕГА ТЕМЫ =====
+    function updateThemeColor() {
+      const meta = document.getElementById('themeColorMeta');
+      if (!meta) return;
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      meta.content = isDark ? '#0c1220' : '#f1f5f9';
+    }
+    
+    const observer = new MutationObserver(function() {
+      updateThemeColor();
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    updateThemeColor();
+
+    // ===== ОБНОВЛЕНИЕ ПЕРЕВОДОВ =====
+    function updateTranslations() {
+      const lang = window.currentLang || 'ru';
+      const texts = typeof LOCALES !== 'undefined' ? (LOCALES[lang] || LOCALES.ru) : {};
+      
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (texts[key]) {
+          el.textContent = texts[key];
+        }
+      });
+    }
+    
+    // ===== ОБНОВЛЕНИЕ СТАТИСТИКИ =====
+    function updateStats() {
+      if (typeof ProgressEngine === 'undefined') {
+        document.getElementById('statSleep').textContent = '-';
+        document.getElementById('statEnergy').textContent = '-';
+        document.getElementById('statProgress').textContent = '-';
+        return;
+      }
+      
+      // Качество сна (из ответов)
+      const sleepAnswers = ProgressEngine.getAnswers('health', 'sleep');
+      const sleepQuality = sleepAnswers.sleep_quality ? sleepAnswers.sleep_quality.answer : null;
+      const sleepLabels = {
+        'tired': '😩 Плохое',
+        'groggy': '🌫️ Среднее',
+        'fresh': '☀️ Отличное'
+      };
+      document.getElementById('statSleep').textContent = sleepQuality ? (sleepLabels[sleepQuality] || '❓') : '-';
+      
+      // Энергия (из питания)
+      const nutritionAnswers = ProgressEngine.getAnswers('health', 'nutrition');
+      const energyAfterFood = nutritionAnswers.energy_after_food ? nutritionAnswers.energy_after_food.answer : null;
+      const energyLabels = {
+        'sleepy': '😴 Низкая',
+        'heavy': '🪨 Тяжесть',
+        'normal': '😐 Нормальная',
+        'energized': '⚡ Высокая'
+      };
+      document.getElementById('statEnergy').textContent = energyAfterFood ? (energyLabels[energyAfterFood] || '❓') : '-';
+      
+      // Прогресс
+      const totalAnswers = Object.keys(sleepAnswers).length + Object.keys(nutritionAnswers).length;
+      const maxQuestions = 12; // Примерное количество
+      const pct = Math.min(Math.round((totalAnswers / maxQuestions) * 100), 100);
+      document.getElementById('statProgress').textContent = pct > 0 ? pct + '%' : '-';
+    }
+
+    // ===== ЗАПУСК =====
+    document.addEventListener('DOMContentLoaded', function() {
+      updateTranslations();
+      setTimeout(updateStats, 300);
+    });
+
+    console.log('✅ Health index.html v3.0 загружен');
+    console.log('🌍 Текущий язык:', window.currentLang);
   </script>
 </body>
 </html>

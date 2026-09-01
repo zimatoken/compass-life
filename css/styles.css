@@ -1,8 +1,56 @@
 /* ============================================================
-   LIFE COMPASS — ГЛОБАЛЬНЫЕ СТИЛИ v2.0
+   LIFE COMPASS — ГЛОБАЛЬНЫЕ СТИЛИ v3.0 (ГИБРИД)
+   ============================================================
+   Основа: Глобальные стили v2.0 + Улучшения v3.0
    ============================================================ */
 
-/* ===== БАЗОВЫЕ СБРОСЫ ===== */
+/* ============================================================
+   1. ПЕРЕМЕННЫЕ (CSS Variables)
+   ============================================================ */
+:root {
+  /* Базовые цвета — светлая тема */
+  --bg: #f8f9fa;
+  --card: #ffffff;
+  --text: #1a1a2e;
+  --text2: #4a4a6a;
+  --text3: #8a8aaa;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.15);
+  --accent: #f59e0b;
+  --accent2: #d97706;
+  --accent3: #b45309;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --radius: 16px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Модульные цвета */
+  --color-happiness: #f59e0b;
+  --color-creativity: #d946ef;
+  --color-health: #ec4899;
+  --color-learning: #f97316;
+  --color-money: #22c55e;
+  --color-purpose: #f43f5e;
+  --color-relationships: #06b6d4;
+  --color-responsibility: #3b82f6;
+}
+
+/* ===== ТЁМНАЯ ТЕМА ===== */
+[data-theme="dark"] {
+  --bg: #0f0f1a;
+  --card: #1a1a2e;
+  --text: #e8e8f0;
+  --text2: #a8a8c8;
+  --text3: #6a6a8a;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   2. БАЗОВЫЕ СБРОСЫ И СТИЛИ
+   ============================================================ */
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -44,7 +92,9 @@ html, body {
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--text3); border-radius: 3px; }
 
-/* ===== HEADER ===== */
+/* ============================================================
+   3. HEADER
+   ============================================================ */
 .module-header {
   text-align: center;
   padding: 20px 16px 8px;
@@ -68,7 +118,104 @@ html, body {
   margin-top: 4px;
 }
 
-/* ===== STATUS BAR ===== */
+/* ============================================================
+   4. ПЕРСОНАЛЬНОЕ ПРИВЕТСТВИЕ (v3.0)
+   ============================================================ */
+.personal-greeting {
+  padding: 20px 16px 12px;
+  text-align: center;
+}
+
+.greeting-title {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 6px;
+  background: linear-gradient(135deg, var(--text), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.greeting-hint {
+  font-size: 14px;
+  color: var(--text2);
+  margin: 0;
+  font-style: italic;
+}
+
+/* Форма ввода имени */
+.name-prompt {
+  margin: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(217, 70, 239, 0.08));
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 16px;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+
+.name-prompt-text {
+  font-size: 15px;
+  color: var(--text);
+  margin: 0 0 12px;
+}
+
+.name-input {
+  background: var(--card);
+  border: 2px solid var(--border);
+  color: var(--text);
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  width: 100%;
+  max-width: 220px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.name-input:focus {
+  border-color: var(--accent);
+}
+
+.name-btn {
+  display: block;
+  margin: 12px auto 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.name-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   5. IDENTITY ANCHOR (v3.0)
+   ============================================================ */
+.identity-anchor {
+  text-align: center;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.06), rgba(217, 70, 239, 0.06));
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  border-radius: 12px;
+  margin: 8px 0 16px;
+  font-style: italic;
+}
+
+/* ============================================================
+   6. STATUS BAR
+   ============================================================ */
 .status-bar {
   display: flex;
   align-items: center;
@@ -95,7 +242,9 @@ html, body {
   50% { opacity: 0.4; transform: scale(0.9); }
 }
 
-/* ===== LANG SWITCHER ===== */
+/* ============================================================
+   7. LANG SWITCHER
+   ============================================================ */
 .lang-switcher {
   display: flex;
   gap: 8px;
@@ -133,7 +282,9 @@ html, body {
   padding: 8px 12px;
 }
 
-/* ===== CATEGORY GRID ===== */
+/* ============================================================
+   8. CATEGORY GRID (v3.0 — улучшенные карточки)
+   ============================================================ */
 .cat-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -141,6 +292,74 @@ html, body {
   padding: 0 16px 16px;
 }
 
+/* v3.0 — улучшенные карточки категорий */
+.cat-btn-v3 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 10px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+  min-height: 110px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.cat-btn-v3::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--module-color, var(--accent)), transparent);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+
+.cat-btn-v3:hover {
+  transform: translateY(-5px) scale(1.02);
+  border-color: var(--module-color, var(--accent));
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.cat-btn-v3:hover::before {
+  opacity: 0.08;
+}
+
+.cat-btn-v3:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+.cat-btn-v3 .cat-icon {
+  font-size: 32px;
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.cat-btn-v3:hover .cat-icon {
+  transform: scale(1.15) rotate(-4deg);
+}
+
+/* Цвета модулей для cat-btn-v3 */
+.cat-btn-v3[data-module="happiness"] { --module-color: var(--color-happiness); }
+.cat-btn-v3[data-module="creativity"] { --module-color: var(--color-creativity); }
+.cat-btn-v3[data-module="health"] { --module-color: var(--color-health); }
+.cat-btn-v3[data-module="learning"] { --module-color: var(--color-learning); }
+.cat-btn-v3[data-module="money"] { --module-color: var(--color-money); }
+.cat-btn-v3[data-module="purpose"] { --module-color: var(--color-purpose); }
+.cat-btn-v3[data-module="relationships"] { --module-color: var(--color-relationships); }
+.cat-btn-v3[data-module="responsibility"] { --module-color: var(--color-responsibility); }
+
+/* Fallback-стиль для старых cat-btn */
 .cat-btn {
   display: flex;
   flex-direction: column;
@@ -175,7 +394,190 @@ html, body {
   font-size: 28px;
 }
 
-/* ===== QUIZ ===== */
+/* ============================================================
+   9. TIMELINE ИНСАЙТОВ (v3.0)
+   ============================================================ */
+.timeline-section {
+  margin: 16px;
+  padding: 16px;
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.timeline-section h3 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.timeline-list {
+  position: relative;
+  padding-left: 20px;
+}
+
+.timeline-list::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--accent), transparent);
+  border-radius: 1px;
+}
+
+.timeline-item {
+  position: relative;
+  padding: 10px 0 10px 16px;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -20px;
+  top: 14px;
+  width: 10px;
+  height: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 8px rgba(245,158,11,0.3);
+}
+
+.timeline-date {
+  font-size: 11px;
+  color: var(--text3);
+  margin-bottom: 2px;
+}
+
+.timeline-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 2px;
+}
+
+.timeline-module {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.timeline-empty {
+  font-size: 14px;
+  color: var(--text3);
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+}
+
+/* ============================================================
+   10. МИКРО-ВЫЗОВЫ (CHALLENGES) (v3.0)
+   ============================================================ */
+.challenge-card {
+  margin: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(239,68,68,0.06), rgba(245,158,11,0.06));
+  border: 1px solid rgba(239,68,68,0.15);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.challenge-card.done {
+  background: linear-gradient(135deg, rgba(34,197,94,0.06), rgba(34,197,94,0.1));
+  border-color: rgba(34,197,94,0.3);
+  opacity: 0.85;
+}
+
+.challenge-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.challenge-icon {
+  font-size: 20px;
+}
+
+.challenge-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  flex: 1;
+}
+
+.challenge-streak {
+  font-size: 13px;
+  color: #f59e0b;
+  font-weight: 700;
+}
+
+.challenge-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 14px;
+  line-height: 1.4;
+}
+
+.challenge-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.challenge-btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.challenge-btn:disabled {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  cursor: default;
+}
+
+/* ============================================================
+   11. ГРАФИК ПРОГРЕССА (v3.0)
+   ============================================================ */
+.progress-chart {
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+  display: block;
+}
+
+.week-chart-section {
+  margin: 16px;
+  padding: 16px;
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.week-chart-section h3 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ============================================================
+   12. QUIZ
+   ============================================================ */
 .question-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -228,7 +630,47 @@ html, body {
   transform: scale(0.98);
 }
 
-/* ===== RESULTS ===== */
+/* ============================================================
+   13. DAY CYCLE
+   ============================================================ */
+.day-cycle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: var(--text2);
+}
+
+.day-cycle .cycle-icon {
+  font-size: 20px;
+}
+
+.day-cycle .cycle-label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.day-cycle .cycle-hint {
+  font-size: 12px;
+  color: var(--text3);
+  font-style: italic;
+}
+
+.day-cycle-hint {
+  font-size: 13px;
+  color: var(--text2);
+  padding: 6px 12px;
+  background: rgba(245, 158, 11, 0.06);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* ============================================================
+   14. RESULTS (v3.0 — улучшенные карточки)
+   ============================================================ */
 .results-header {
   text-align: center;
   padding: 20px 0 12px;
@@ -251,37 +693,91 @@ html, body {
   font-size: 14px;
 }
 
-.result-card {
+/* v3.0 — улучшенные карточки результатов */
+.result-card-v3 {
   background: var(--card);
   border: 1px solid var(--border);
-  border-left: 4px solid var(--accent);
-  border-radius: 14px;
-  padding: 16px;
-  margin-bottom: 12px;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  animation: fadeIn 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  animation: fadeIn 0.4s ease backwards;
 }
 
-.result-card:hover {
-  transform: translateX(4px);
+.result-card-v3:nth-child(1) { animation-delay: 0ms; }
+.result-card-v3:nth-child(2) { animation-delay: 80ms; }
+.result-card-v3:nth-child(3) { animation-delay: 160ms; }
+.result-card-v3:nth-child(4) { animation-delay: 240ms; }
+
+.result-card-v3:hover {
+  transform: translateY(-2px);
   border-color: var(--border-hover);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
 
-.result-card:active {
-  transform: translateX(2px) scale(0.99);
+.result-card-v3.expanded {
+  border-color: var(--accent);
+  box-shadow: 0 4px 24px rgba(245,158,11,0.1);
 }
 
-.result-card.expanded .result-detail {
-  display: block;
+.result-card-v3 .result-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
 }
 
-.result-title {
+.result-card-v3 .result-emoji {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.result-card-v3 .result-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.result-card-v3 .result-title {
   font-size: 16px;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin: 0 0 4px;
+  color: var(--text);
 }
 
+.result-card-v3 .result-desc-short {
+  font-size: 13px;
+  color: var(--text2);
+  margin: 0 0 8px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.result-card-v3 .result-badges-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.result-card-v3 .result-yield {
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 600;
+  padding: 8px 0 4px;
+}
+
+.result-card-v3 .result-expand-hint {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 10px;
+  text-align: center;
+  opacity: 0.7;
+}
+
+/* Бейджи (общие) */
 .result-badges {
   display: flex;
   gap: 6px;
@@ -327,11 +823,23 @@ html, body {
   color: #ef4444;
 }
 
+.badge.time-badge {
+  background: rgba(148, 163, 184, 0.12);
+  color: var(--text2);
+}
+
+/* Детали результата */
 .result-detail {
   display: none;
   margin-top: 12px;
   font-size: 14px;
   line-height: 1.6;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.result-card-v3.expanded .result-detail {
+  display: block;
 }
 
 .result-detail h4 {
@@ -352,6 +860,32 @@ html, body {
   margin-bottom: 6px;
 }
 
+/* Fallback для старых result-card */
+.result-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  animation: fadeIn 0.3s ease;
+}
+
+.result-card:hover {
+  transform: translateX(4px);
+  border-color: var(--border-hover);
+}
+
+.result-card:active {
+  transform: translateX(2px) scale(0.99);
+}
+
+.result-card.expanded .result-detail {
+  display: block;
+}
+
 .daily-action-box {
   background: rgba(245, 158, 11, 0.1);
   border-left: 3px solid var(--accent);
@@ -366,7 +900,230 @@ html, body {
   color: var(--text2);
 }
 
-/* ===== RESOURCES ===== */
+/* ============================================================
+   15. FOLLOW-UP MODAL (v3.0)
+   ============================================================ */
+.followup-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.followup-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+}
+
+.followup-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px 24px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.35s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.followup-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+.followup-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--text);
+}
+
+.followup-question {
+  font-size: 15px;
+  color: var(--text2);
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+.followup-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.followup-option {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  color: var(--text);
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.followup-option:hover {
+  border-color: var(--accent);
+  background: rgba(245,158,11,0.05);
+}
+
+.followup-skip {
+  background: none;
+  border: none;
+  color: var(--text3);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 8px;
+  text-decoration: underline;
+}
+
+.followup-reward {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--success);
+  padding: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+.followup-info {
+  font-size: 13px;
+  color: var(--text3);
+  padding: 8px 0;
+  text-align: center;
+  font-style: italic;
+}
+
+/* ============================================================
+   16. DAILY ACTION v3.0
+   ============================================================ */
+.daily-action-v3 {
+  background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(217,70,239,0.08));
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 16px;
+  padding: 16px;
+  margin: 16px 0;
+  transition: all 0.3s ease;
+}
+
+.daily-action-v3.done {
+  opacity: 0.6;
+  border-color: rgba(34,197,94,0.3);
+  background: linear-gradient(135deg, rgba(34,197,94,0.08), rgba(34,197,94,0.04));
+}
+
+.daily-action-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.daily-action-icon {
+  font-size: 18px;
+}
+
+.daily-action-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.daily-action-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+.daily-action-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.daily-action-btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.daily-action-btn:disabled {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  cursor: default;
+}
+
+/* DAILY TASK (старая версия) */
+.daily-task-btn {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.daily-task-btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.daily-task-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.daily-task-content {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin: 12px 16px;
+}
+
+.daily-task-content.done {
+  opacity: 0.6;
+}
+
+.daily-task-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.daily-task-text {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 8px 0 12px;
+}
+
+/* ============================================================
+   17. РЕСУРСЫ (v3.0)
+   ============================================================ */
 .resources-list {
   list-style: none;
   padding: 0;
@@ -382,7 +1139,49 @@ html, body {
   color: var(--text2);
 }
 
-/* ===== CROSS-MODULE RECOMMENDATION ===== */
+.resources-list-v3 {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.resource-item-v3 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s;
+}
+
+.resource-item-v3:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.1);
+  transform: translateX(4px);
+}
+
+.resource-icon-v3 {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 32px;
+  text-align: center;
+}
+
+.resource-text-v3 {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ============================================================
+   18. CROSS-MODULE RECOMMENDATION
+   ============================================================ */
 .cross-recommendation {
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(139, 92, 246, 0.08));
   border: 1px solid var(--border);
@@ -411,7 +1210,9 @@ html, body {
   border-bottom: none;
 }
 
-/* ===== HABIT TRACKER ===== */
+/* ============================================================
+   19. HABIT TRACKER
+   ============================================================ */
 .habit-tracker-header {
   display: flex;
   align-items: center;
@@ -486,33 +1287,52 @@ html, body {
   50% { transform: scale(1.08); }
 }
 
-/* ===== DAY CYCLE ===== */
-.day-cycle {
+/* ============================================================
+   20. ПРОГРЕСС-БАР (v3.0)
+   ============================================================ */
+.progress-v3 {
+  margin: 16px;
+  padding: 16px;
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.progress-v3-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  justify-content: center;
-  padding: 8px 16px;
-  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.progress-v3-label {
+  font-size: 14px;
   color: var(--text2);
 }
 
-.day-cycle .cycle-icon {
-  font-size: 20px;
+.progress-v3-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
 }
 
-.day-cycle .cycle-label {
-  font-weight: 600;
-  color: var(--text);
+.progress-v3-bar {
+  height: 10px;
+  background: var(--border);
+  border-radius: 5px;
+  overflow: hidden;
 }
 
-.day-cycle .cycle-hint {
-  font-size: 12px;
-  color: var(--text3);
-  font-style: italic;
+.progress-v3-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 5px;
+  transition: width 1s cubic-bezier(0.4,0,0.2,1);
 }
 
-/* ===== FEEDBACK BLOCK ===== */
+/* ============================================================
+   21. FEEDBACK BLOCK
+   ============================================================ */
 .feedback-block {
   margin: 16px;
   padding: 16px;
@@ -568,31 +1388,9 @@ html, body {
   background: linear-gradient(135deg, #f59e0b, #d97706);
 }
 
-/* ===== DAILY TASK BUTTON ===== */
-.daily-task-btn {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: #fff;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  width: 100%;
-  transition: all 0.2s ease;
-}
-
-.daily-task-btn:hover:not(:disabled) {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
-}
-
-.daily-task-btn:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-
-/* ===== SUPPORT BLOCK ===== */
+/* ============================================================
+   22. SUPPORT BLOCK
+   ============================================================ */
 .support-block {
   margin: 16px;
   padding: 20px;
@@ -714,7 +1512,9 @@ html, body {
   text-decoration: none;
 }
 
-/* ===== FOOTER ===== */
+/* ============================================================
+   23. FOOTER
+   ============================================================ */
 .footer {
   text-align: center;
   padding: 20px 16px;
@@ -722,7 +1522,9 @@ html, body {
   color: var(--text3);
 }
 
-/* ===== TOAST ===== */
+/* ============================================================
+   24. TOAST
+   ============================================================ */
 .toast {
   position: fixed;
   bottom: 24px;
@@ -750,19 +1552,59 @@ html, body {
   pointer-events: auto;
 }
 
-/* ===== ANIMATIONS ===== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ============================================================
+   25. БАЗОВЫЕ КНОПКИ
+   ============================================================ */
+.btn-primary {
+  display: inline-block;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  width: 100%;
 }
 
-/* ===== RESPONSIVE ===== */
+.btn-primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* ============================================================
+   26. АНИМАЦИИ
+   ============================================================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.2); }
+  50%      { box-shadow: 0 0 20px 4px rgba(245,158,11,0.1); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   27. RESPONSIVE
+   ============================================================ */
 @media (max-width: 480px) {
   .app {
     padding: 0 0 20px;
@@ -789,6 +1631,16 @@ html, body {
 
   .cat-btn .cat-icon {
     font-size: 24px;
+  }
+
+  .cat-btn-v3 {
+    padding: 16px 8px;
+    min-height: 90px;
+    font-size: 12px;
+  }
+
+  .cat-btn-v3 .cat-icon {
+    font-size: 28px;
   }
 
   .question-text {
@@ -833,6 +1685,23 @@ html, body {
     font-size: 12px;
     padding: 6px 10px;
   }
+
+  .personal-greeting {
+    padding: 16px 12px 8px;
+  }
+
+  .greeting-title {
+    font-size: 20px;
+  }
+
+  .followup-card {
+    padding: 20px 16px;
+    max-width: 320px;
+  }
+
+  .results-header h2 {
+    font-size: 20px;
+  }
 }
 
 @media (max-width: 360px) {
@@ -851,6 +1720,16 @@ html, body {
     font-size: 20px;
   }
 
+  .cat-btn-v3 {
+    padding: 12px 6px;
+    min-height: 80px;
+    font-size: 11px;
+  }
+
+  .cat-btn-v3 .cat-icon {
+    font-size: 22px;
+  }
+
   .question-text {
     font-size: 15px;
   }
@@ -863,5 +1742,41 @@ html, body {
   .habit-day {
     width: 18px;
     height: 18px;
+  }
+
+  .greeting-title {
+    font-size: 18px;
+  }
+
+  .result-card-v3 .result-title {
+    font-size: 14px;
+  }
+
+  .result-card-v3 .result-emoji {
+    font-size: 22px;
+  }
+}
+
+/* ============================================================
+   28. ПЕЧАТЬ
+   ============================================================ */
+@media print {
+  .lang-switcher,
+  .feedback-block,
+  .support-block,
+  .daily-action-btn,
+  .challenge-btn,
+  .btn-primary {
+    display: none !important;
+  }
+
+  .app {
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .result-card-v3 {
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 }

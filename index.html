@@ -3,110 +3,635 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0c1220">
+  <meta name="theme-color" content="#0c1220" id="themeColorMeta">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>КОМПАС ПО ЖИЗНИ — Алгоритмы для развития</title>
+  <title>🧭 КОМПАС ПО ЖИЗНИ — Алгоритмы для развития</title>
   <meta name="apple-mobile-web-app-title" content="Компас">
+  <meta name="description" content="Интерактивный гид по 8 сферам жизни: призвание, счастье, здоровье, деньги, отношения, творчество, обучение, ответственность">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./assets/icons/icon-192.png">
   <link rel="stylesheet" href="./css/styles.css">
+  
+  <!-- Дополнительные стили для главной -->
   <style>
-    .compass-header { text-align:center; padding:24px 16px 8px; }
-    .compass-header h1 { font-size:28px; letter-spacing:3px; margin:0; }
-    .compass-header .subtitle { font-size:16px; color:var(--text2); margin-top:6px; font-weight:500; }
-    .compass-logo { width:72px; height:72px; margin-bottom:8px; font-size:56px; }
-    .day-cycle-bar { display:flex; gap:6px; overflow-x:auto; padding:12px 16px; margin:0 -4px; }
-    .day-cycle-bar::-webkit-scrollbar { display:none; }
-    .cycle-pill { min-width:80px; text-align:center; padding:8px 10px; border-radius:20px; background:var(--card); border:1px solid var(--border); font-size:12px; white-space:nowrap; opacity:0.6; }
-    .cycle-pill.active { opacity:1; border-color:var(--accent); background:rgba(245,158,11,0.15); font-weight:700; }
-    .cycle-hint { text-align:center; font-size:12px; color:var(--text3); padding:0 16px 8px; }
-    .mod-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:0 16px 16px; }
-    .mod-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:18px 8px; background:var(--card); border:1px solid var(--border); border-radius:16px; text-decoration:none; color:var(--text); transition:all .2s; }
-    .mod-card:hover { transform:translateY(-3px); border-color:var(--accent); }
-    .mod-card .icon { font-size:32px; }
-    .mod-card .label { font-size:13px; font-weight:600; text-align:center; }
-    .daily-task-box { margin:16px; padding:16px; background:linear-gradient(135deg, rgba(245,158,11,0.1), rgba(139,92,246,0.1)); border-radius:16px; border-left:4px solid var(--accent); }
-    .daily-task-box.done { opacity:.6; border-left-color:var(--success); }
-    .daily-task-box .task-header { font-size:13px; color:var(--text2); margin-bottom:8px; }
-    .daily-task-box .task-text { font-weight:600; margin-bottom:12px; }
-    .daily-task-btn { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; border:none; padding:12px 20px; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; width:100%; }
-    .daily-task-btn:disabled { opacity:0.5; cursor:default; }
-    .progress-section { padding:0 16px 16px; }
-    .progress-bar-wrap { height:8px; background:var(--border); border-radius:4px; overflow:hidden; margin-top:8px; }
-    .progress-bar-fill { height:100%; background:linear-gradient(90deg, var(--accent), var(--accent2)); border-radius:4px; width:0%; transition:width .6s ease; }
-    .feedback-block { margin:16px; padding:16px; background:var(--card); border-radius:16px; border:1px solid var(--border); text-align:center; }
-    .feedback-buttons { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:12px; }
-    .feedback-btn { display:inline-flex; align-items:center; gap:6px; padding:10px 20px; border-radius:12px; text-decoration:none; font-weight:600; font-size:14px; color:#fff; transition:all .2s; }
-    .feedback-btn:hover { transform:translateY(-2px); filter:brightness(1.1); }
-    .fb-tg { background:linear-gradient(135deg,#0088cc,#005f8a); }
-    .fb-wa { background:linear-gradient(135deg,#25D366,#128C7E); }
-    .fb-mail { background:linear-gradient(135deg,#f59e0b,#d97706); }
-    .footer { text-align:center; padding:20px 16px; font-size:12px; color:var(--text3); }
+    /* ===== ПЕРСОНАЛЬНОЕ ПРИВЕТСТВИЕ ===== */
+    #personalGreeting {
+      margin: 0 -4px;
+    }
+    
+    /* ===== СЕКЦИИ НА ГЛАВНОЙ ===== */
+    .home-section {
+      margin: 12px 0;
+    }
+    
+    .home-section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0 16px 8px;
+    }
+    
+    /* ===== ЛЕНТА ВРЕМЕНИ (TIMELINE) ===== */
+    #timelineContainer {
+      margin: 0 4px;
+    }
+    
+    /* ===== ВЫЗОВ ДНЯ (CHALLENGE) ===== */
+    #challengeContainer {
+      margin: 0 4px;
+    }
+    
+    /* ===== ГРАФИК НЕДЕЛИ ===== */
+    #weekChart {
+      margin: 0 auto;
+    }
+    
+    /* ===== ТЕМА-КНОПКА В ХЕДЕРЕ ===== */
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+      padding: 4px 16px 12px;
+    }
+    
+    .header-actions .theme-btn,
+    .header-actions .lang-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text);
+    }
+    
+    .header-actions .theme-btn:hover,
+    .header-actions .lang-btn:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-1px);
+    }
+    
+    .header-actions .lang-btn.active {
+      border-color: var(--accent);
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--accent);
+    }
+    
+    /* ===== МОДУЛЬНАЯ СЕТКА ===== */
+    .mod-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 0 16px 16px;
+    }
+    
+    .mod-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 18px 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      min-height: 100px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+    .mod-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--module-color, var(--accent)), transparent);
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+    
+    .mod-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      border-color: var(--module-color, var(--accent));
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .mod-card:hover::after {
+      opacity: 0.06;
+    }
+    
+    .mod-card .icon {
+      font-size: 32px;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .mod-card:hover .icon {
+      transform: scale(1.15) rotate(-4deg);
+    }
+    
+    .mod-card .label {
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .mod-card .badge-mod {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      font-size: 10px;
+      background: var(--success);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 700;
+      z-index: 2;
+      display: none;
+    }
+    
+    .mod-card .badge-mod.done {
+      display: block;
+    }
+    
+    /* ===== ЦВЕТА МОДУЛЕЙ ===== */
+    .mod-card[data-module="purpose"] { --module-color: #f43f5e; border-top: 3px solid #f43f5e; }
+    .mod-card[data-module="happiness"] { --module-color: #f59e0b; border-top: 3px solid #f59e0b; }
+    .mod-card[data-module="habits"] { --module-color: #8b5cf6; border-top: 3px solid #8b5cf6; }
+    .mod-card[data-module="money"] { --module-color: #22c55e; border-top: 3px solid #22c55e; }
+    .mod-card[data-module="responsibility"] { --module-color: #3b82f6; border-top: 3px solid #3b82f6; }
+    .mod-card[data-module="health"] { --module-color: #ec4899; border-top: 3px solid #ec4899; }
+    .mod-card[data-module="relationships"] { --module-color: #06b6d4; border-top: 3px solid #06b6d4; }
+    .mod-card[data-module="creativity"] { --module-color: #d946ef; border-top: 3px solid #d946ef; }
+    .mod-card[data-module="learning"] { --module-color: #f97316; border-top: 3px solid #f97316; }
+
+    /* ===== QR-КОД ===== */
+    .qr-block {
+      margin: 16px;
+      padding: 20px;
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .qr-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 12px;
+    }
+
+    .qr-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      background: #ffffff;
+      border-radius: 12px;
+      margin: 0 auto 12px;
+      max-width: 200px;
+    }
+
+    .qr-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .qr-link {
+      font-size: 13px;
+      color: var(--text2);
+      margin: 0;
+    }
+
+    .qr-link a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .qr-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== БЛОК ПОДДЕРЖКИ ===== */
+    .support-block {
+      margin: 16px;
+      padding: 20px;
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .support-header {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .support-heart {
+      font-size: 24px;
+    }
+
+    .support-title {
+      font-size: 16px;
+      font-weight: 700;
+      display: block;
+      margin-top: 4px;
+    }
+
+    .support-desc {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text2);
+      margin-bottom: 16px;
+    }
+
+    .support-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .support-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      color: white;
+      transition: all 0.2s ease;
+    }
+
+    .support-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    .support-btn:active {
+      transform: scale(0.98);
+    }
+
+    .support-btn .btn-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .support-btn .btn-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .support-btn .btn-label {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .support-btn .btn-hint {
+      font-weight: 400;
+      font-size: 12px;
+      opacity: 0.85;
+    }
+
+    .support-btn.sbp {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    .support-btn.tinkoff {
+      background: linear-gradient(135deg, #333333, #1a1a1a);
+    }
+
+    .support-btn.evm {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    }
+
+    .support-btn.tron {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+    }
+
+    .support-btn.bitcoin {
+      background: linear-gradient(135deg, #f97316, #c2410c);
+    }
+
+    .support-btn.solana {
+      background: linear-gradient(135deg, #8b5cf6, #14b8a6);
+    }
+
+    .support-legal {
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 12px;
+      color: var(--text3);
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .support-legal a {
+      color: var(--water);
+      text-decoration: none;
+    }
+
+    .support-legal a:hover {
+      text-decoration: underline;
+    }
+
+    .support-footer {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text2);
+    }
+
+    /* ===== РЕСПОНСИВ ===== */
+    @media (max-width: 480px) {
+      .mod-grid {
+        gap: 8px;
+      }
+      .mod-card {
+        padding: 14px 6px;
+        min-height: 85px;
+      }
+      .mod-card .icon {
+        font-size: 28px;
+      }
+      .mod-card .label {
+        font-size: 11px;
+      }
+
+      .qr-wrap {
+        max-width: 160px;
+      }
+
+      .support-btn {
+        font-size: 14px;
+        padding: 12px 14px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .mod-grid {
+        gap: 6px;
+      }
+      .mod-card {
+        padding: 10px 4px;
+        min-height: 70px;
+      }
+      .mod-card .icon {
+        font-size: 22px;
+      }
+      .mod-card .label {
+        font-size: 10px;
+      }
+
+      .qr-wrap {
+        max-width: 140px;
+      }
+
+      .support-btn {
+        font-size: 13px;
+        padding: 10px 12px;
+      }
+
+      .support-btn .btn-hint {
+        font-size: 11px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="app">
+  <div class="app" id="app">
+    <!-- ===== ЭКРАН ГЛАВНОЙ ===== -->
     <div class="screen active" id="screen-home">
+      <!-- Шапка -->
       <div class="compass-header">
         <div class="compass-logo">🧭</div>
         <h1 data-i18n="app_title">КОМПАС ПО ЖИЗНИ</h1>
         <p class="subtitle" data-i18n="app_subtitle">Алгоритмы для развития</p>
       </div>
 
+      <!-- Кнопки: тема + язык -->
+      <div class="header-actions">
+        <button class="theme-btn" id="themeToggle" onclick="window.toggleTheme && window.toggleTheme()" aria-label="Toggle theme">🌙</button>
+        <button class="lang-btn active" data-lang="ru" onclick="window.setLang && window.setLang('ru')">🇷🇺 RU</button>
+        <button class="lang-btn" data-lang="en" onclick="window.setLang && window.setLang('en')">🇬🇧 EN</button>
+      </div>
+
+      <!-- Персональное приветствие -->
+      <div id="personalGreeting"></div>
+
+      <!-- Цикл дня -->
       <div class="day-cycle-bar" id="dayCycleBar"></div>
       <div class="cycle-hint" id="cycleHint"></div>
 
-      <div class="mod-grid">
-        <a href="./modules/purpose/index.html" class="mod-card" style="border-top:3px solid #f43f5e">
-          <span class="icon">🎯</span>
-          <span class="label" data-i18n="cat_purpose">Призвание</span>
-        </a>
-        <a href="./modules/happiness/index.html" class="mod-card" style="border-top:3px solid #f59e0b">
-          <span class="icon">😊</span>
-          <span class="label" data-i18n="cat_happiness">Счастье</span>
-        </a>
-        <a href="./modules/habits/index.html" class="mod-card" style="border-top:3px solid #8b5cf6">
-          <span class="icon">🔄</span>
-          <span class="label" data-i18n="cat_habits">Привычки</span>
-        </a>
-        <a href="./modules/money/index.html" class="mod-card" style="border-top:3px solid #22c55e">
-          <span class="icon">💰</span>
-          <span class="label" data-i18n="cat_money">Деньги</span>
-        </a>
-        <a href="./modules/responsibility/index.html" class="mod-card" style="border-top:3px solid #3b82f6">
-          <span class="icon">⚡</span>
-          <span class="label" data-i18n="cat_responsibility">Ответственность</span>
-        </a>
-        <a href="./modules/health/index.html" class="mod-card" style="border-top:3px solid #ec4899">
-          <span class="icon">🧘</span>
-          <span class="label" data-i18n="cat_health">Здоровье</span>
-        </a>
-        <a href="./modules/relationships/index.html" class="mod-card" style="border-top:3px solid #06b6d4">
-          <span class="icon">🗣️</span>
-          <span class="label" data-i18n="cat_relationships">Отношения</span>
-        </a>
-        <a href="./modules/creativity/index.html" class="mod-card" style="border-top:3px solid #d946ef">
-          <span class="icon">🎨</span>
-          <span class="label" data-i18n="cat_creativity">Творчество</span>
-        </a>
-        <a href="./modules/learning/index.html" class="mod-card" style="border-top:3px solid #f97316">
-          <span class="icon">📚</span>
-          <span class="label" data-i18n="cat_learning">Обучение</span>
-        </a>
+      <!-- ВЫЗОВ ДНЯ (CHALLENGE) -->
+      <div id="challengeContainer"></div>
+
+      <!-- Модульная сетка -->
+      <div class="home-section">
+        <p class="home-section-title" data-i18n="modules_title">📋 Модули</p>
+        <div class="mod-grid">
+          <a href="./modules/purpose/index.html" class="mod-card" data-module="purpose">
+            <span class="icon">🎯</span>
+            <span class="label" data-i18n="cat_purpose">Призвание</span>
+            <span class="badge-mod" id="badge-purpose"></span>
+          </a>
+          <a href="./modules/happiness/index.html" class="mod-card" data-module="happiness">
+            <span class="icon">😊</span>
+            <span class="label" data-i18n="cat_happiness">Счастье</span>
+            <span class="badge-mod" id="badge-happiness"></span>
+          </a>
+          <a href="./modules/habits/index.html" class="mod-card" data-module="habits">
+            <span class="icon">🔄</span>
+            <span class="label" data-i18n="cat_habits">Привычки</span>
+            <span class="badge-mod" id="badge-habits"></span>
+          </a>
+          <a href="./modules/money/index.html" class="mod-card" data-module="money">
+            <span class="icon">💰</span>
+            <span class="label" data-i18n="cat_money">Деньги</span>
+            <span class="badge-mod" id="badge-money"></span>
+          </a>
+          <a href="./modules/responsibility/index.html" class="mod-card" data-module="responsibility">
+            <span class="icon">⚡</span>
+            <span class="label" data-i18n="cat_responsibility">Ответственность</span>
+            <span class="badge-mod" id="badge-responsibility"></span>
+          </a>
+          <a href="./modules/health/index.html" class="mod-card" data-module="health">
+            <span class="icon">🧘</span>
+            <span class="label" data-i18n="cat_health">Здоровье</span>
+            <span class="badge-mod" id="badge-health"></span>
+          </a>
+          <a href="./modules/relationships/index.html" class="mod-card" data-module="relationships">
+            <span class="icon">🗣️</span>
+            <span class="label" data-i18n="cat_relationships">Отношения</span>
+            <span class="badge-mod" id="badge-relationships"></span>
+          </a>
+          <a href="./modules/creativity/index.html" class="mod-card" data-module="creativity">
+            <span class="icon">🎨</span>
+            <span class="label" data-i18n="cat_creativity">Творчество</span>
+            <span class="badge-mod" id="badge-creativity"></span>
+          </a>
+          <a href="./modules/learning/index.html" class="mod-card" data-module="learning">
+            <span class="icon">📚</span>
+            <span class="label" data-i18n="cat_learning">Обучение</span>
+            <span class="badge-mod" id="badge-learning"></span>
+          </a>
+        </div>
       </div>
 
-      <div class="daily-task-box" id="dailyTaskBox" style="display:none">
-        <p class="task-header">🎯 <span data-i18n="daily_task_title">Задание на сегодня</span></p>
-        <p class="task-text" id="dailyTaskText">—</p>
-        <button class="daily-task-btn" id="dailyTaskBtn" onclick="completeDailyTask()" data-i18n="daily_task_done">✅ Выполнено</button>
+      <!-- ЛЕНТА ВРЕМЕНИ (TIMELINE) -->
+      <div class="home-section">
+        <p class="home-section-title" data-i18n="timeline_title">📖 История инсайтов</p>
+        <div id="timelineContainer" class="timeline-section"></div>
       </div>
 
+      <!-- ГРАФИК НЕДЕЛИ -->
+      <div class="home-section">
+        <p class="home-section-title" data-i18n="week_chart_title">📊 Прогресс за неделю</p>
+        <div class="week-chart-section">
+          <div id="weekChart"></div>
+        </div>
+      </div>
+
+      <!-- Прогресс модулей -->
       <div class="progress-section">
         <p style="font-size:13px;color:var(--text2)" data-i18n="progress_modules">📊 Пройдено модулей</p>
-        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="moduleProgress"></div></div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="moduleProgress" style="width:0%"></div>
+        </div>
+        <p style="font-size:12px;color:var(--text3);text-align:center;margin-top:4px">
+          <span id="progressText">0 из 9</span>
+        </p>
       </div>
 
+      <!-- ========================================== -->
+      <!-- QR-КОД ДЛЯ БЫСТРОЙ УСТАНОВКИ -->
+      <!-- ========================================== -->
+      <div class="qr-block">
+        <p class="qr-title" data-i18n="qr_title">📱 Отсканируй QR-код и установи приложение</p>
+        <div class="qr-wrap">
+          <img src="./assets/images/qr-code-compass.png" 
+               alt="QR-код для установки КОМПАС ПО ЖИЗНИ" 
+               id="qrImage"
+               onerror="this.parentElement.innerHTML='<p style=\'color:var(--text3);font-size:14px;\'>QR-код скоро появится</p>'">
+        </div>
+        <p class="qr-link">
+          🔗 <span data-i18n="qr_link_text">Или перейди по ссылке:</span> 
+          <a href="https://zimatoken.github.io/compass-life/" target="_blank">
+            zimatoken.github.io/compass-life
+          </a>
+        </p>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- БЛОК ПОДДЕРЖКИ (ДОНАТ) -->
+      <!-- ========================================== -->
+      <div class="support-block" id="supportBlock">
+        <div class="support-header">
+          <span class="support-heart">❤️</span>
+          <span class="support-title" data-i18n="support_title">Спасибо, что выбрали КОМПАС ПО ЖИЗНИ!</span>
+        </div>
+
+        <p class="support-desc" data-i18n="support_desc">
+          Если приложение помогло — скажите спасибо. Это вдохновляет нас делать его лучше.
+        </p>
+
+        <div class="support-methods">
+
+          <!-- СБП -->
+          <button class="support-btn sbp" onclick="window.copySBP ? copySBP() : copyToClipboard('+79639424331', 'Номер скопирован')" title="Скопировать реквизиты СБП">
+            <span class="btn-icon">🏦</span>
+            <span class="btn-text">
+              <span class="btn-label" data-i18n="support_sbp">Перевод по СБП</span>
+              <span class="btn-hint" data-i18n="support_sbp_hint">Работает в любом банке РФ</span>
+            </span>
+          </button>
+
+          <!-- Т-Банк -->
+          <a href="https://www.tinkoff.ru/rm/zima.token1/5z4YV31214" 
+             target="_blank" 
+             rel="noopener noreferrer nofollow"
+             class="support-btn tinkoff"
+             title="Открыть в Т-Банке">
+            <span class="btn-icon">💳</span>
+            <span class="btn-text">
+              <span class="btn-label" data-i18n="support_tinkoff">Т-Банк (Тинькофф)</span>
+              <span class="btn-hint" data-i18n="support_tinkoff_hint">Для клиентов Т-Банка</span>
+            </span>
+          </a>
+
+          <!-- EVM -->
+          <button class="support-btn evm" onclick="copyToClipboard('0x428B1872339a628213d8560C1C2aB26146499dcA', 'EVM-адрес скопирован')" title="Скопировать EVM-адрес">
+            <span class="btn-icon">⬡</span>
+            <span class="btn-text">
+              <span class="btn-label" data-i18n="support_evm">USDT / ETH (EVM)</span>
+              <span class="btn-hint" data-i18n="support_evm_hint">Ethereum, Base, Polygon, BNB, Arbitrum, OP</span>
+            </span>
+          </button>
+
+          <!-- Tron -->
+          <button class="support-btn tron" onclick="copyToClipboard('TYBCg6Ev5uPjAopKxhritoqSuDwVHV5LbT', 'Tron-адрес скопирован')" title="Скопировать Tron-адрес">
+            <span class="btn-icon">🔴</span>
+            <span class="btn-text">
+              <span class="btn-label" data-i18n="support_tron">USDT TRC-20 (Tron)</span>
+              <span class="btn-hint" data-i18n="support_tron_hint">Сеть Tron — низкая комиссия</span>
+            </span>
+          </button>
+
+          <!-- Bitcoin -->
+          <button class="support-btn bitcoin" onclick="copyToClipboard('bc1qw0lfv4hwvzk9qhax2xp0n4jm94lce4mkn8pwjl', 'Bitcoin-адрес скопирован')" title="Скопировать Bitcoin-адрес">
+            <span class="btn-icon">₿</span>
+            <span class="btn-text">
+              <span class="btn-label" data-i18n="support_bitcoin">Bitcoin (BTC)</span>
+              <span class="btn-hint" data-i18n="support_bitcoin_hint">Сеть Bitcoin — надёжно</span>
+            </span>
+          </button>
+
+          <!-- Solana -->
+          <button class="support-btn solana" onclick="copyToClipboard('4rPx8Vtk5dcBe8CpCb9ZgaGf9HwW9cf5FesuspijLfCj', 'Solana-адрес скопирован')" title="Скопировать Solana-адрес">
+            <span class="btn-icon">◎</span>
+            <span class="btn-text">
+              <span class="btn-label" data-i18n="support_solana">Solana (SOL / USDC)</span>
+              <span class="btn-hint" data-i18n="support_solana_hint">Сеть Solana — мгновенно</span>
+            </span>
+          </button>
+
+        </div>
+
+        <div class="support-legal" data-i18n="support_legal">
+          💎 Добровольное пожертвование на развитие проекта. Услуги не оказываются, товар не поставляется. 
+          По вопросам: <a href="mailto:compass.life.help@gmail.com">compass.life.help@gmail.com</a>
+        </div>
+
+        <div class="support-footer">
+          <span data-i18n="support_footer">Спасибо, что вы с нами! 🙌</span>
+        </div>
+      </div>
+
+      <!-- Feedback блок -->
       <div class="feedback-block">
         <p style="color:var(--text2);font-size:14px">💬 <span data-i18n="feedback_title">Есть вопросы или предложения?</span></p>
         <div class="feedback-buttons">
@@ -115,72 +640,241 @@
         </div>
       </div>
 
+      <!-- Подвал -->
       <div class="footer">
-        <span data-i18n="footer_text">v1.1 · Life Compass</span>
+        <span data-i18n="footer_text">v3.1 · Life Compass</span>
         <span style="display:block;margin-top:4px">📧 compass.life.help@gmail.com</span>
       </div>
     </div>
   </div>
 
+  <!-- Toast -->
   <div class="toast" id="toast"></div>
 
+  <!-- ===== SCRIPTS ===== -->
   <script src="./core/locales.js"></script>
   <script src="./core/registry.js"></script>
   <script src="./core/theme.js"></script>
   <script src="./core/progressEngine.js"></script>
   <script>
-    window.currentLang = localStorage.getItem('language') || 'ru';
+    // Устанавливаем язык перед загрузкой остальных скриптов
+    window.currentLang = localStorage.getItem('compass_lang') || 'ru';
   </script>
   <script src="./core/engine.js"></script>
   <script src="./core/tracker.js"></script>
   <script src="./core/app.js"></script>
+
+  <!-- ===== ИНИЦИАЛИЗАЦИЯ ===== -->
   <script>
-    function renderDayCycle() {
-      const cycle = (typeof getDayCycle === 'function') ? getDayCycle() : null;
-      if(!cycle) return;
-      const bar = document.getElementById('dayCycleBar');
-      const hint = document.getElementById('cycleHint');
-      if(!bar) return;
-      const slots = [
-        { key:'awakening',  h:[6,7,8],      label:'🌅 ' + t('day_cycle_awakening') },
-        { key:'deep',       h:[9,10,11],    label:'☀️ ' + t('day_cycle_deep') },
-        { key:'routine',    h:[12,13],      label:'🍽️ ' + t('day_cycle_routine') },
-        { key:'social',     h:[14,15,16],   label:'🌤️ ' + t('day_cycle_social') },
-        { key:'physical',   h:[17,18],      label:'🌇 ' + t('day_cycle_physical') },
-        { key:'reflect',    h:[19,20,21],   label:'🌙 ' + t('day_cycle_reflect') },
-        { key:'rest',       h:[22,23,0,1,2,3,4,5], label:'😴 ' + t('day_cycle_rest') }
-      ];
-      bar.innerHTML = slots.map(s => {
-        const active = s.h.includes(new Date().getHours()) ? 'active' : '';
-        return `<div class="cycle-pill ${active}">${s.label}</div>`;
-      }).join('');
-      if(hint) hint.textContent = t('day_cycle_hint_' + cycle.type) || '';
-    }
-    renderDayCycle();
-    setInterval(renderDayCycle, 60000);
+    (function() {
+      'use strict';
 
-    function updateModuleProgress() {
-      const profile = (typeof ProgressEngine !== 'undefined') ? ProgressEngine.getCrossModuleProfile() : { completed:0, total:5 };
-      const pct = Math.round((profile.completed / profile.total) * 100);
-      const fill = document.getElementById('moduleProgress');
-      if(fill) fill.style.width = pct + '%';
-    }
-    updateModuleProgress();
-
-    function renderDailyTask() {
-      const box = document.getElementById('dailyTaskBox');
-      const text = document.getElementById('dailyTaskText');
-      const task = (typeof ProgressEngine !== 'undefined') ? ProgressEngine.getDailyAction() : null;
-      if(task && text) {
-        text.textContent = task.text || task;
-        box.style.display = 'block';
+      // ===== 1. ФУНКЦИЯ КОПИРОВАНИЯ =====
+      function copyToClipboard(text, msg) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => {
+            if (typeof showToast === 'function') showToast(msg);
+            else alert(msg);
+          }).catch(() => {
+            fallbackCopy(text, msg);
+          });
+        } else {
+          fallbackCopy(text, msg);
+        }
       }
-    }
-    renderDailyTask();
 
-    if('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').then(r => console.log('SW ok', r.scope)).catch(e => console.error('SW err', e));
-    }
+      function fallbackCopy(text, msg) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          if (typeof showToast === 'function') showToast(msg);
+          else alert(msg);
+        } catch (e) {
+          if (typeof showToast === 'function') showToast('Реквизиты: ' + text);
+          else alert('Реквизиты: ' + text);
+        }
+        document.body.removeChild(ta);
+      }
+
+      window.copyToClipboard = copyToClipboard;
+
+      // ===== 2. ОБНОВЛЕНИЕ МЕТА-ТЕГА ТЕМЫ =====
+      function updateThemeColor() {
+        const meta = document.getElementById('themeColorMeta');
+        if (!meta) return;
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        meta.content = isDark ? '#0c1220' : '#f1f5f9';
+      }
+      
+      const observer = new MutationObserver(function() {
+        updateThemeColor();
+      });
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      updateThemeColor();
+
+      // ===== 3. РЕНДЕР ЦИКЛА ДНЯ =====
+      function renderDayCycle() {
+        const cycle = (typeof getDayCycle === 'function') ? getDayCycle() : null;
+        if (!cycle) return;
+        
+        const bar = document.getElementById('dayCycleBar');
+        const hint = document.getElementById('cycleHint');
+        if (!bar) return;
+        
+        const slots = [
+          { key: 'awakening', h: [6, 7, 8], label: '🌅 ' + (t('day_cycle_awakening') || 'Пробуждение') },
+          { key: 'deep', h: [9, 10, 11], label: '☀️ ' + (t('day_cycle_deep') || 'Глубокая работа') },
+          { key: 'routine', h: [12, 13], label: '🍽️ ' + (t('day_cycle_routine') || 'Рутина') },
+          { key: 'social', h: [14, 15, 16], label: '🌤️ ' + (t('day_cycle_social') || 'Встречи') },
+          { key: 'physical', h: [17, 18], label: '🌇 ' + (t('day_cycle_physical') || 'Движение') },
+          { key: 'reflect', h: [19, 20, 21], label: '🌙 ' + (t('day_cycle_reflect') || 'Рефлексия') },
+          { key: 'rest', h: [22, 23, 0, 1, 2, 3, 4, 5], label: '😴 ' + (t('day_cycle_rest') || 'Сон') }
+        ];
+        
+        const currentHour = new Date().getHours();
+        bar.innerHTML = slots.map(s => {
+          const active = s.h.includes(currentHour) ? 'active' : '';
+          return `<div class="cycle-pill ${active}">${s.label}</div>`;
+        }).join('');
+        
+        if (hint) {
+          hint.textContent = cycle.hint || t('day_cycle_hint_' + cycle.type) || '';
+        }
+      }
+      
+      renderDayCycle();
+      setInterval(renderDayCycle, 60000);
+
+      // ===== 4. ОБНОВЛЕНИЕ ПРОГРЕССА МОДУЛЕЙ =====
+      function updateModuleProgress() {
+        const profile = (typeof ProgressEngine !== 'undefined') ? ProgressEngine.getCrossModuleProfile() : { completed: 0, total: 9 };
+        const pct = Math.round((profile.completed / profile.total) * 100);
+        const fill = document.getElementById('moduleProgress');
+        const text = document.getElementById('progressText');
+        if (fill) fill.style.width = pct + '%';
+        if (text) text.textContent = profile.completed + ' из ' + profile.total;
+        
+        const modules = ['purpose', 'happiness', 'habits', 'money', 'responsibility', 'health', 'relationships', 'creativity', 'learning'];
+        for (const mod of modules) {
+          const badge = document.getElementById('badge-' + mod);
+          if (badge) {
+            const isDone = (typeof ProgressEngine !== 'undefined') ? ProgressEngine.isQuizCompleted(mod, mod) : false;
+            badge.textContent = isDone ? '✅' : '';
+            badge.classList.toggle('done', isDone);
+          }
+        }
+      }
+      
+      updateModuleProgress();
+
+      // ===== 5. ИНИЦИАЛИЗАЦИЯ APP.JS =====
+      function initApp() {
+        if (typeof renderPersonalGreeting === 'function') {
+          const container = document.getElementById('personalGreeting');
+          if (container) container.innerHTML = renderPersonalGreeting();
+        }
+        
+        if (typeof DailyChallenge !== 'undefined' && typeof DailyChallenge.render === 'function') {
+          DailyChallenge.render('challengeContainer');
+        }
+        
+        if (typeof InsightTimeline !== 'undefined' && typeof InsightTimeline.render === 'function') {
+          InsightTimeline.render('timelineContainer');
+        }
+        
+        if (typeof ProgressChart !== 'undefined' && typeof ProgressChart.renderMini === 'function') {
+          const weekData = ProgressChart.getWeeklyData();
+          ProgressChart.renderMini('weekChart', weekData);
+        }
+        
+        if (typeof FollowUpEngine !== 'undefined' && typeof FollowUpEngine.checkAndShow === 'function') {
+          setTimeout(function() {
+            FollowUpEngine.checkAndShow();
+          }, 1000);
+        }
+        
+        if (typeof updateDailyTaskUI === 'function') {
+          updateDailyTaskUI();
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          setTimeout(initApp, 100);
+        });
+      } else {
+        setTimeout(initApp, 100);
+      }
+
+      // ===== 6. ОБНОВЛЕНИЕ ПРИ СМЕНЕ ЯЗЫКА =====
+      const originalSetLang = window.setLang;
+      if (originalSetLang) {
+        window.setLang = function(lang) {
+          originalSetLang(lang);
+          renderDayCycle();
+          updateModuleProgress();
+          if (typeof renderPersonalGreeting === 'function') {
+            const container = document.getElementById('personalGreeting');
+            if (container) container.innerHTML = renderPersonalGreeting();
+          }
+          if (typeof DailyChallenge !== 'undefined' && typeof DailyChallenge.render === 'function') {
+            DailyChallenge.render('challengeContainer');
+          }
+          if (typeof InsightTimeline !== 'undefined' && typeof InsightTimeline.render === 'function') {
+            InsightTimeline.render('timelineContainer');
+          }
+        };
+      }
+
+      // ===== 7. SERVICE WORKER С АВТООБНОВЛЕНИЕМ =====
+      let swUpdateAvailable = false;
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js')
+          .then(function(reg) {
+            console.log('✅ SW registered:', reg.scope);
+
+            // Проверка обновлений каждые 60 минут
+            setInterval(function() {
+              reg.update().then(function() {
+                console.log('🔄 SW check for updates');
+              }).catch(function(err) {
+                console.warn('⚠️ SW update check failed:', err);
+              });
+            }, 60 * 60 * 1000);
+
+            reg.addEventListener('updatefound', function() {
+              const newSW = reg.installing;
+              console.log('🔄 New SW found, installing...');
+
+              newSW.addEventListener('statechange', function() {
+                if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+                  swUpdateAvailable = true;
+                  if (typeof showToast === 'function') {
+                    showToast('🔄 Доступна новая версия! Перезагрузите страницу.');
+                  }
+                  console.log('🔄 Update available! Please refresh.');
+                }
+              });
+            });
+          })
+          .catch(function(err) { console.error('❌ SW registration failed:', err); });
+
+        navigator.serviceWorker.addEventListener('controllerchange', function() {
+          console.log('🔄 Service Worker обновлён!');
+          if (typeof showToast === 'function') {
+            showToast('✅ Приложение обновлено! Перезагрузите страницу.');
+          }
+        });
+      }
+
+      console.log('✅ Index.html v3.1 загружен (QR + Support + Auto-Update)');
+    })();
   </script>
 </body>
 </html>
