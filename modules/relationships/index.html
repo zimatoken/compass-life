@@ -3,173 +3,482 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#06b6d4">
+  <meta name="theme-color" content="#06b6d4" id="themeColorMeta">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>🗣️ КОМПАС — Отношения</title>
+  <meta name="apple-mobile-web-app-title" content="Компас">
+  <link rel="manifest" href="../../manifest.json">
+  <link rel="apple-touch-icon" href="../../assets/icons/icon-192.png">
   <link rel="stylesheet" href="../../css/styles.css">
   <link rel="stylesheet" href="../../css/module.css">
   <link rel="stylesheet" href="../../css/modules/relationships.css">
+  
+  <style>
+    /* ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ МОДУЛЯ ===== */
+    .module-header {
+      text-align: center;
+      padding: 20px 16px 8px;
+    }
+    
+    .module-header .module-icon {
+      font-size: 48px;
+    }
+    
+    .module-header h1 {
+      font-size: 28px;
+      margin: 4px 0;
+      font-weight: 800;
+      color: var(--text);
+    }
+    
+    .module-header .module-subtitle {
+      font-size: 15px;
+      color: var(--text2);
+      margin: 0;
+    }
+    
+    .lang-switcher {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      padding: 8px 16px;
+      flex-wrap: wrap;
+    }
+    
+    .lang-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text2);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .lang-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+    }
+    
+    .lang-btn.active {
+      border-color: #06b6d4;
+      color: #06b6d4;
+      font-weight: 600;
+    }
+    
+    .theme-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text2);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .theme-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+    }
+    
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 0 16px 16px;
+    }
+    
+    .cat-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 20px 12px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      min-height: 100px;
+      text-align: center;
+    }
+    
+    .cat-btn:hover {
+      transform: translateY(-3px);
+      border-color: #06b6d4;
+      box-shadow: 0 4px 20px rgba(6, 182, 212, 0.15);
+    }
+    
+    .cat-btn:active {
+      transform: scale(0.97);
+    }
+    
+    .cat-btn .cat-icon {
+      font-size: 32px;
+    }
+    
+    .cat-btn .cat-badge {
+      font-size: 11px;
+      background: #22c55e;
+      color: #fff;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+    
+    /* ===== КВИЗ ===== */
+    .quiz-back {
+      padding: 16px;
+      text-align: center;
+    }
+    
+    .quiz-back .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text2);
+      padding: 10px 24px;
+      border-radius: 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .quiz-back .btn-secondary:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+    }
+    
+    /* ===== СТАТИСТИКА ===== */
+    .stats-section {
+      margin: 0 16px 16px;
+      padding: 16px;
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+    
+    .stats-section h3 {
+      font-size: 14px;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 12px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    
+    .stats-item {
+      text-align: center;
+      padding: 8px;
+      background: var(--bg);
+      border-radius: 10px;
+    }
+    
+    .stats-item .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    
+    .stats-item .stat-label {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 2px;
+    }
+    
+    /* ===== TIMELINE ===== */
+    .timeline-section {
+      margin: 16px;
+      padding: 16px;
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+    
+    .timeline-section h3 {
+      font-size: 14px;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 12px;
+    }
+    
+    /* ===== CHART ===== */
+    .chart-section {
+      margin: 16px;
+      padding: 16px;
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+    
+    .chart-section h3 {
+      font-size: 14px;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 12px;
+    }
+    
+    /* ===== ПРОГРЕСС ===== */
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #06b6d4, #22d3ee);
+      border-radius: 3px;
+      transition: width 0.6s ease;
+    }
+    
+    .progress-text {
+      font-size: 12px;
+      color: var(--text3);
+      text-align: center;
+    }
+    
+    /* ===== АДАПТИВ ===== */
+    @media (max-width: 480px) {
+      .cat-grid {
+        gap: 8px;
+      }
+      .cat-btn {
+        padding: 16px 8px;
+        min-height: 80px;
+        font-size: 13px;
+      }
+      .cat-btn .cat-icon {
+        font-size: 28px;
+      }
+      .module-header h1 {
+        font-size: 24px;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+      }
+      .stats-item .stat-value {
+        font-size: 17px;
+      }
+    }
+    
+    @media (max-width: 360px) {
+      .cat-grid {
+        gap: 6px;
+      }
+      .cat-btn {
+        padding: 12px 6px;
+        min-height: 70px;
+        font-size: 12px;
+      }
+      .cat-btn .cat-icon {
+        font-size: 22px;
+      }
+      .module-header h1 {
+        font-size: 20px;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+      }
+      .stats-item .stat-value {
+        font-size: 15px;
+      }
+    }
+  </style>
 </head>
 <body data-module="relationships">
-  <nav class="module-nav"><button class="nav-btn" onclick="goHome()">🏠 Главная</button></nav>
+  <div class="app">
+    <!-- ===== ЭКРАН ГЛАВНОЙ ===== -->
+    <div class="screen active" id="screen-home">
+      <div class="module-header">
+        <div class="module-icon">🗣️</div>
+        <h1 data-i18n="relationships_title">Отношения</h1>
+        <p class="module-subtitle" data-i18n="relationships_subtitle">Выберите направление</p>
+      </div>
 
-  <div id="screen-categories" class="screen active">
-    <header class="module-header">
-      <div class="module-icon">🗣️</div>
-      <h1 class="module-title" id="moduleTitle">Отношения</h1>
-      <p class="module-desc" id="moduleDesc">Строй связи</p>
-    </header>
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="ru" onclick="setLang('ru')">🇷🇺 RU</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">🇬🇧 EN</button>
+        <button class="theme-btn" onclick="window.toggleTheme && window.toggleTheme()">🌙</button>
+      </div>
 
-    <div class="personal-greeting-container" id="greetingContainer"></div>
-    <div class="module-progress" id="moduleProgress"></div>
+      <!-- ===== ПРИВЕТСТВИЕ ===== -->
+      <div id="greetingContainer"></div>
 
-    <!-- 4 КНОПКИ (2 РАБОЧИЕ + 2 ЗАГЛУШКИ) -->
-    <div class="cat-grid">
-      <!-- Семья (рабочий) -->
-      <button class="cat-btn" onclick="startFlow('family')">
-        <span class="cat-icon">👨‍👩‍👧</span>
-        <span data-i18n="cat_family">Семья</span>
-      </button>
+      <!-- ===== ПРОГРЕСС МОДУЛЯ ===== -->
+      <div id="moduleProgress"></div>
 
-      <!-- Конфликты (рабочий) -->
-      <button class="cat-btn" onclick="startFlow('conflicts')">
-        <span class="cat-icon">💔</span>
-        <span data-i18n="cat_conflicts">Конфликты</span>
-      </button>
+      <!-- ===== 4 КНОПКИ (2 РАБОЧИЕ + 2 ЗАГЛУШКИ) ===== -->
+      <div class="cat-grid">
+        <!-- Семья (рабочий) -->
+        <button class="cat-btn" onclick="startFlow('family')">
+          <span class="cat-icon">👨‍👩‍👧</span>
+          <span data-i18n="cat_family">Семья</span>
+        </button>
 
-      <!-- Дружба (заглушка) -->
-      <button class="cat-btn" onclick="showToast('🔄 В разработке')" style="opacity:0.6">
-        <span class="cat-icon">🤝</span>
-        <span data-i18n="cat_friendship">Дружба</span>
-      </button>
+        <!-- Конфликты (рабочий) -->
+        <button class="cat-btn" onclick="startFlow('conflicts')">
+          <span class="cat-icon">💔</span>
+          <span data-i18n="cat_conflicts">Конфликты</span>
+        </button>
 
-      <!-- Границы (заглушка) -->
-      <button class="cat-btn" onclick="showToast('🔄 В разработке')" style="opacity:0.6">
-        <span class="cat-icon">🛡️</span>
-        <span data-i18n="cat_boundaries">Границы</span>
-      </button>
-    </div>
+        <!-- Дружба (заглушка) -->
+        <button class="cat-btn" onclick="showToast('🔄 В разработке')" style="opacity:0.6">
+          <span class="cat-icon">🤝</span>
+          <span data-i18n="cat_friendship">Дружба</span>
+        </button>
 
-    <!-- Статистика -->
-    <div class="stats-section" id="statsSection">
-      <h3 data-i18n="stats_title">📊 Ваша статистика</h3>
-      <div class="stats-grid" id="statsGrid">
-        <div class="stats-item">
-          <div class="stat-value" id="statFamily">-</div>
-          <div class="stat-label" data-i18n="stat_family">Семья</div>
+        <!-- Границы (заглушка) -->
+        <button class="cat-btn" onclick="showToast('🔄 В разработке')" style="opacity:0.6">
+          <span class="cat-icon">🛡️</span>
+          <span data-i18n="cat_boundaries">Границы</span>
+        </button>
+      </div>
+
+      <!-- ===== СТАТИСТИКА ===== -->
+      <div class="stats-section" id="statsSection">
+        <h3 data-i18n="stats_title">📊 Ваша статистика</h3>
+        <div class="stats-grid" id="statsGrid">
+          <div class="stats-item">
+            <div class="stat-value" id="statFamily">-</div>
+            <div class="stat-label" data-i18n="stat_family">Семья</div>
+          </div>
+          <div class="stats-item">
+            <div class="stat-value" id="statConflict">-</div>
+            <div class="stat-label" data-i18n="stat_conflict">Конфликты</div>
+          </div>
+          <div class="stats-item">
+            <div class="stat-value" id="statProgress">-</div>
+            <div class="stat-label" data-i18n="stat_progress">Прогресс</div>
+          </div>
         </div>
-        <div class="stats-item">
-          <div class="stat-value" id="statConflict">-</div>
-          <div class="stat-label" data-i18n="stat_conflict">Конфликты</div>
-        </div>
-        <div class="stats-item">
-          <div class="stat-value" id="statProgress">-</div>
-          <div class="stat-label" data-i18n="stat_progress">Прогресс</div>
-        </div>
+      </div>
+
+      <!-- ===== TIMELINE ===== -->
+      <div class="timeline-section">
+        <h3 id="timelineTitle">📖 История инсайтов</h3>
+        <div id="timelineContainer"></div>
+      </div>
+
+      <!-- ===== ГРАФИК ===== -->
+      <div class="chart-section">
+        <h3 id="chartTitle">📊 Прогресс за неделю</h3>
+        <div id="chartContainer"></div>
+      </div>
+
+      <div style="text-align:center;padding:16px 0 24px">
+        <a href="../../index.html" style="color:var(--text2);text-decoration:none;font-size:14px;transition:color 0.2s" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">
+          ← <span data-i18n="back_home">На главную</span>
+        </a>
       </div>
     </div>
 
-    <section class="timeline-section">
-      <h3 id="timelineTitle">📖 История инсайтов</h3>
-      <div id="timelineContainer"></div>
-    </section>
+    <!-- ===== ЭКРАН КВИЗА ===== -->
+    <div class="screen" id="screen-quiz">
+      <div class="module-header">
+        <div class="module-icon">🗣️</div>
+        <h1 id="quiz-title" data-i18n="relationships_title">Отношения</h1>
+        <p class="module-subtitle" id="quiz-subtitle" data-i18n="quiz_in_progress">Прохождение квиза</p>
+      </div>
 
-    <section class="chart-section">
-      <h3 id="chartTitle">📊 Прогресс за неделю</h3>
-      <div id="chartContainer"></div>
-    </section>
+      <div id="quiz-container" style="padding:0 16px"></div>
+
+      <div class="quiz-back">
+        <button class="btn-secondary" onclick="goHome()">← <span data-i18n="back">Назад</span></button>
+      </div>
+    </div>
   </div>
 
-  <div id="screen-quiz" class="screen">
-    <nav class="quiz-nav"><button class="nav-btn" onclick="showScreen('screen-categories')">← К категориям</button></nav>
-    <div class="quiz-header"><div class="quiz-icon" id="quizIcon">🎯</div><h2 id="quiz-title">Квиз</h2></div>
-    <div id="quiz-container"></div>
-  </div>
+  <div class="toast" id="toast"></div>
 
-  <div id="toast" class="toast"></div>
-
-  <!-- ===== ПРАВИЛЬНЫЙ ПОРЯДОК ЗАГРУЗКИ ===== -->
+  <!-- ===== SCRIPTS ===== -->
   <script src="../../core/locales.js"></script>
   <script src="../../core/registry.js"></script>
   <script src="../../core/theme.js"></script>
   <script src="../../core/progressEngine.js"></script>
 
+  <script>
+    // ===== УСТАНОВКА ЯЗЫКА =====
+    function setLang(l) {
+      localStorage.setItem('compass_lang', l);
+      window.currentLang = l;
+      location.reload();
+    }
+    
+    window.currentLang = localStorage.getItem('compass_lang') || 'ru';
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === window.currentLang);
+      });
+    });
+  </script>
+
+  <!-- ===== ДАННЫЕ КВИЗОВ ===== -->
   <script src="data/family.js"></script>
   <script src="data/conflicts.js"></script>
   <script src="data/en/family-en.js"></script>
   <script src="data/en/conflicts-en.js"></script>
 
-  <script>window.currentLang = localStorage.getItem('compass_lang') || 'ru';</script>
-
+  <!-- ===== ЯДРО ===== -->
   <script src="../../core/engine.js"></script>
   <script src="../../core/tracker.js"></script>
   <script src="../../core/app.js"></script>
 
   <script>
-    (function initModule() {
-      const moduleName = document.body.dataset.module;
-      const lang = localStorage.getItem('compass_lang') || 'ru';
-      window.currentLang = lang;
-      document.documentElement.lang = lang;
-
-      const titleEl = document.getElementById('moduleTitle');
-      const descEl = document.getElementById('moduleDesc');
-      if (typeof t === 'function') {
-        if (titleEl) titleEl.textContent = t('cat_' + moduleName) || moduleName;
-        if (descEl) descEl.textContent = t('cat_' + moduleName + '_desc') || '';
-        document.getElementById('timelineTitle').textContent = t('timeline_title') || '📖 История инсайтов';
-        document.getElementById('chartTitle').textContent = t('week_chart_title') || '📊 Прогресс за неделю';
-      }
-
-      const greetingContainer = document.getElementById('greetingContainer');
-      if (greetingContainer && typeof renderPersonalGreeting === 'function') {
-        greetingContainer.innerHTML = renderPersonalGreeting();
-      }
-
-      // 4 кнопки уже в HTML — НЕ удаляем!
-
-      if (typeof InsightTimeline !== 'undefined') InsightTimeline.render('timelineContainer');
-
-      if (typeof ProgressChart !== 'undefined') {
-        const data = ProgressChart.getWeeklyData();
-        const hasData = data && data.some(d => d.value > 0);
-        const container = document.getElementById('chartContainer');
-        if (hasData) {
-          ProgressChart.renderMini('chartContainer', data);
-        } else if (container) {
-          container.innerHTML = '<p style="color:var(--text3);font-size:13px;text-align:center;padding:12px 0;">📊 Выполняй задания — и здесь появится график</p>';
-        }
-      }
-
-      renderModuleProgress(moduleName);
-      updateStats();
-      if (typeof FollowUpEngine !== 'undefined') setTimeout(() => FollowUpEngine.checkAndShow(), 1500);
-    })();
-
-    function renderModuleProgress(moduleName) {
-      const container = document.getElementById('moduleProgress');
-      if (!container) return;
-
-      const moduleCategories = {
-        purpose: ['passion', 'skills'],
-        happiness: ['blockers', 'energy_audit'],
-        habits: ['identity', 'environment'],
-        money: ['os', 'audit'],
-        responsibility: ['commitments', 'planning'],
-        health: ['sleep', 'nutrition'],
-        learning: ['reading', 'techniques'],
-        creativity: ['channel', 'fear'],
-        relationships: ['family', 'conflicts']
-      };
-
-      const cats = moduleCategories[moduleName] || [];
-      const done = cats.filter(c => localStorage.getItem('compass_' + moduleName + '_' + c + '_completed') === 'true').length;
-      const pct = cats.length ? Math.round((done / cats.length) * 100) : 0;
-      container.innerHTML = `
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-        <div class="progress-text">${typeof t === 'function' ? t('progress_modules') : '📊 Прогресс'}: ${done}/${cats.length}</div>
-      `;
+    // ===== SERVICE WORKER =====
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../../sw.js')
+        .then(r => console.log('✅ SW ok', r.scope))
+        .catch(e => console.error('❌ SW err', e));
     }
 
+    // ===== ОБНОВЛЕНИЕ МЕТА-ТЕГА ТЕМЫ =====
+    function updateThemeColor() {
+      const meta = document.getElementById('themeColorMeta');
+      if (!meta) return;
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      meta.content = isDark ? '#0c1220' : '#f1f5f9';
+    }
+    
+    const observer = new MutationObserver(function() {
+      updateThemeColor();
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    updateThemeColor();
+
+    // ===== ОБНОВЛЕНИЕ ПЕРЕВОДОВ =====
+    function updateTranslations() {
+      const lang = window.currentLang || 'ru';
+      const texts = typeof LOCALES !== 'undefined' ? (LOCALES[lang] || LOCALES.ru) : {};
+      
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (texts[key]) {
+          el.textContent = texts[key];
+        }
+      });
+    }
+
+    // ===== ОБНОВЛЕНИЕ СТАТИСТИКИ =====
     function updateStats() {
       if (typeof ProgressEngine === 'undefined') {
         document.getElementById('statFamily').textContent = '-';
@@ -201,6 +510,72 @@
       const maxQuestions = 12;
       const pct = Math.min(Math.round((totalAnswers / maxQuestions) * 100), 100);
       document.getElementById('statProgress').textContent = pct > 0 ? pct + '%' : '-';
+    }
+
+    // ===== ИНИЦИАЛИЗАЦИЯ МОДУЛЯ =====
+    (function initModule() {
+      const moduleName = document.body.dataset.module;
+      const lang = localStorage.getItem('compass_lang') || 'ru';
+      window.currentLang = lang;
+      document.documentElement.lang = lang;
+
+      const titleEl = document.getElementById('quiz-title');
+      if (titleEl && typeof t === 'function') {
+        titleEl.textContent = t('cat_' + moduleName) || moduleName;
+      }
+
+      const greetingContainer = document.getElementById('greetingContainer');
+      if (greetingContainer && typeof renderPersonalGreeting === 'function') {
+        greetingContainer.innerHTML = renderPersonalGreeting();
+      }
+
+      renderModuleProgress(moduleName);
+      updateStats();
+
+      if (typeof InsightTimeline !== 'undefined') {
+        InsightTimeline.render('timelineContainer');
+      }
+
+      if (typeof ProgressChart !== 'undefined') {
+        const data = ProgressChart.getWeeklyData();
+        const hasData = data && data.some(d => d.value > 0);
+        const container = document.getElementById('chartContainer');
+        if (hasData) {
+          ProgressChart.renderMini('chartContainer', data);
+        } else if (container) {
+          container.innerHTML = '<p style="color:var(--text3);font-size:13px;text-align:center;padding:12px 0;">📊 Выполняй задания — и здесь появится график</p>';
+        }
+      }
+
+      if (typeof FollowUpEngine !== 'undefined') {
+        setTimeout(() => FollowUpEngine.checkAndShow(), 1500);
+      }
+    })();
+
+    function renderModuleProgress(moduleName) {
+      const container = document.getElementById('moduleProgress');
+      if (!container) return;
+
+      const moduleCategories = {
+        purpose: ['passion', 'skills'],
+        happiness: ['blockers', 'energy_audit'],
+        habits: ['identity', 'environment'],
+        money: ['os', 'audit'],
+        responsibility: ['commitments', 'planning'],
+        health: ['sleep', 'nutrition'],
+        learning: ['reading', 'techniques'],
+        creativity: ['channel', 'fear'],
+        relationships: ['family', 'conflicts']
+      };
+
+      const cats = moduleCategories[moduleName] || [];
+      const done = cats.filter(c => localStorage.getItem('compass_' + moduleName + '_' + c + '_completed') === 'true').length;
+      const pct = cats.length ? Math.round((done / cats.length) * 100) : 0;
+      
+      container.innerHTML = `
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <div class="progress-text">${typeof t === 'function' ? t('progress_modules') : '📊 Прогресс'}: ${done}/${cats.length}</div>
+      `;
     }
   </script>
 </body>
