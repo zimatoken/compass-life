@@ -10,15 +10,15 @@
 // КОНФИГУРАЦИЯ МОДУЛЕЙ
 // ============================================================
 const moduleCategories = {
-  purpose: ['passion', 'skills'],
-  happiness: ['blockers', 'energy_audit'],
-  habits: ['identity', 'environment'],
-  money: ['os', 'audit'],
-  responsibility: ['commitments', 'planning'],
-  health: ['sleep', 'nutrition'],
-  learning: ['reading', 'techniques'],
-  creativity: ['channel', 'fear'],
-  relationships: ['family', 'conflicts']
+  purpose: ['passion', 'skills', 'mission', 'calling'],
+  happiness: ['blockers', 'energy_audit', 'gratitude', 'joy'],
+  habits: ['identity', 'environment', 'tracker', 'system'],
+  money: ['os', 'audit', 'investments', 'debts'],
+  responsibility: ['commitments', 'planning', 'discipline', 'delegation'],
+  health: ['sleep', 'nutrition', 'movement', 'stress'],
+  learning: ['reading', 'techniques', 'memory', 'speedreading'],
+  creativity: ['channel', 'fear', 'blocks', 'inspiration'],
+  relationships: ['conflicts', 'family', 'friendship', 'boundaries']
 };
 
 // ============================================================
