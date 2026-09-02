@@ -18,19 +18,37 @@ const LOCALES = {
     app_title: "🧭 КОМПАС ПО ЖИЗНИ",
     app_subtitle: "Алгоритмы для развития",
     footer_text: "v3.0 · Life Compass",
-    footer_email: "compass.life.help@gmail.com",
+    footer_email: "📧 compass.life.help@gmail.com",
     feedback_title: "💬 Есть вопросы или предложения?",
 
+    // === ГЛАВНАЯ: СЕКЦИИ И ФОРМА ИМЕНИ ===
+    modules_title: "📋 Модули",
+    timeline_title: "📖 История инсайтов",
+    week_chart_title: "📊 Прогресс",
+    timeline_empty: "Пройди первый квиз — и здесь появится твоя история.",
+    week_chart_empty: "📊 Выполняй задания — и здесь появится график",
+    progress_count: "{completed} из {total}",
+    name_prompt_text: "Как тебя зовут? Это поможет мне обращаться лично.",
+    name_input_placeholder: "Имя",
+    name_save_btn: "Сохранить",
+    greeting_morning: "Доброе утро",
+    greeting_afternoon: "Добрый день",
+    greeting_evening: "Добрый вечер",
+    qr_install_title: "Установи приложение",
+    qr_install_desc: " — отсканируй QR-код или перейди по ссылке",
+    qr_alt: "QR-код для установки приложения",
+    support_spoiler_title: "❤️ Поддержать проект",
+
     // === МОДУЛИ (названия для главной) ===
-    cat_purpose: "🎯 Призвание",
-    cat_happiness: "😊 Счастье",
-    cat_habits: "🔄 Привычки",
-    cat_money: "💰 Деньги",
-    cat_responsibility: "⚡ Ответственность",
-    cat_health: "🧘 Здоровье",
-    cat_relationships: "🗣️ Отношения",
-    cat_creativity: "🎨 Творчество",
-    cat_learning: "📚 Обучение",
+    cat_purpose: "Призвание",
+    cat_happiness: "Счастье",
+    cat_habits: "Привычки",
+    cat_money: "Деньги",
+    cat_responsibility: "Ответственность",
+    cat_health: "Здоровье",
+    cat_relationships: "Отношения",
+    cat_creativity: "Творчество",
+    cat_learning: "Обучение",
 
     // === КАТЕГОРИИ (для timeline) ===
     cat_blockers: "Блокеры",
@@ -151,19 +169,37 @@ const LOCALES = {
     app_title: "🧭 LIFE COMPASS",
     app_subtitle: "Algorithms for growth",
     footer_text: "v3.0 · Life Compass",
-    footer_email: "compass.life.help@gmail.com",
+    footer_email: "📧 compass.life.help@gmail.com",
     feedback_title: "💬 Questions or suggestions?",
 
+    // === MAIN: SECTIONS AND NAME FORM ===
+    modules_title: "📋 Modules",
+    timeline_title: "📖 Insight History",
+    week_chart_title: "📊 Progress",
+    timeline_empty: "Complete your first quiz — your history will appear here.",
+    week_chart_empty: "📊 Complete tasks — and a chart will appear here",
+    progress_count: "{completed} of {total}",
+    name_prompt_text: "What's your name? It helps me address you personally.",
+    name_input_placeholder: "Name",
+    name_save_btn: "Save",
+    greeting_morning: "Good morning",
+    greeting_afternoon: "Good afternoon",
+    greeting_evening: "Good evening",
+    qr_install_title: "Install the app",
+    qr_install_desc: " — scan the QR code or follow the link",
+    qr_alt: "QR code to install the app",
+    support_spoiler_title: "❤️ Support the project",
+
     // === MODULES ===
-    cat_purpose: "🎯 Purpose",
-    cat_happiness: "😊 Happiness",
-    cat_habits: "🔄 Habits",
-    cat_money: "💰 Money",
-    cat_responsibility: "⚡ Responsibility",
-    cat_health: "🧘 Health",
-    cat_relationships: "🗣️ Relationships",
-    cat_creativity: "🎨 Creativity",
-    cat_learning: "📚 Learning",
+    cat_purpose: "Purpose",
+    cat_happiness: "Happiness",
+    cat_habits: "Habits",
+    cat_money: "Money",
+    cat_responsibility: "Responsibility",
+    cat_health: "Health",
+    cat_relationships: "Relationships",
+    cat_creativity: "Creativity",
+    cat_learning: "Learning",
 
     // === CATEGORIES (for timeline) ===
     cat_blockers: "Blockers",
@@ -298,20 +334,32 @@ function t(key, params) {
 }
 window.t = t;
 
+// Обновление placeholder-ов с data-i18n-placeholder
+function updateI18nPlaceholders() {
+  const texts = LOCALES[currentLang] || LOCALES.ru;
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    if (texts[key]) el.placeholder = texts[key];
+  });
+  document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+    const key = el.dataset.i18nAlt;
+    if (texts[key]) el.alt = texts[key];
+  });
+}
+
+window.updateI18nPlaceholders = updateI18nPlaceholders;
+
 // Функция установки языка
 function setLang(lang) {
   if (!LOCALES[lang]) return;
   currentLang = lang;
+  window.currentLang = lang;
   localStorage.setItem('compass_lang', lang);
-  // Обновить UI
-  document.querySelectorAll('[data-lang]').forEach(el => {
-    const key = el.getAttribute('data-lang');
-    if (key) el.textContent = t(key);
-  });
-  // Обновить классы кнопок
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
+  if (typeof updateTranslations === 'function') updateTranslations();
+  updateI18nPlaceholders();
   console.log('🌍 Язык изменён на:', lang);
 }
 window.setLang = setLang;

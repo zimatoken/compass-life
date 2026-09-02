@@ -25,7 +25,7 @@ const moduleCategories = {
 // ОБНОВЛЕНИЕ ПЕРЕВОДОВ
 // ============================================================
 function updateTranslations() {
-  const lang = window.currentLang || 'ru';
+  const lang = (typeof getLang === 'function' ? getLang() : null) || window.currentLang || 'ru';
   const texts = typeof LOCALES !== 'undefined' ? (LOCALES[lang] || LOCALES.ru) : {};
   
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -34,6 +34,8 @@ function updateTranslations() {
       el.textContent = texts[key];
     }
   });
+
+  if (typeof updateI18nPlaceholders === 'function') updateI18nPlaceholders();
 }
 
 // ============================================================

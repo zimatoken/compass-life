@@ -59,7 +59,7 @@ const UserProfile = {
   getGreeting() {
     const hour = new Date().getHours();
     const name = this.getName();
-    const timeGreeting = hour < 12 ? 'Доброе утро' : hour < 18 ? 'Добрый день' : 'Добрый вечер';
+    const timeGreeting = hour < 12 ? t('greeting_morning') : hour < 18 ? t('greeting_afternoon') : t('greeting_evening');
     return name ? `${timeGreeting}, ${name}!` : timeGreeting + '!';
   }
 };
@@ -69,9 +69,9 @@ function renderPersonalGreeting() {
   const name = UserProfile.getName();
   if (!name) {
     return `<div class="name-prompt" id="namePrompt">
-      <p class="name-prompt-text">Как тебя зовут? Это поможет мне обращаться лично.</p>
-      <input type="text" id="userNameInput" class="name-input" placeholder="Имя" maxlength="20">
-      <button class="name-btn" onclick="saveUserName()">Сохранить</button>
+      <p class="name-prompt-text" data-i18n="name_prompt_text">Как тебя зовут? Это поможет мне обращаться лично.</p>
+      <input type="text" id="userNameInput" class="name-input" data-i18n-placeholder="name_input_placeholder" placeholder="Имя" maxlength="20">
+      <button class="name-btn" onclick="saveUserName()" data-i18n="name_save_btn">Сохранить</button>
     </div>`;
   }
   const greeting = UserProfile.getGreeting();
@@ -125,7 +125,7 @@ const InsightTimeline = {
     if (!container) return;
     const items = this.getRecent(5);
     if (items.length === 0) {
-      container.innerHTML = `<p class="timeline-empty">Пройди первый квиз — и здесь появится твоя история.</p>`;
+      container.innerHTML = `<p class="timeline-empty">${t('timeline_empty')}</p>`;
       return;
     }
     const html = items.map(item => `
@@ -698,6 +698,8 @@ function initHomeEnhanced() {
   FollowUpEngine.checkAndShow();
 
   updateDailyTaskUI();
+
+  if (typeof updateTranslations === 'function') updateTranslations();
 }
 window.initHomeEnhanced = initHomeEnhanced;
 
