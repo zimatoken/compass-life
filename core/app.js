@@ -1,14 +1,13 @@
 // ============================================================
-// APP.JS — ГИБРИДНАЯ ВЕРСИЯ v3.0
+// APP.JS — ИСПРАВЛЕННАЯ ВЕРСИЯ v3.0-FIX
 // ============================================================
-// Что нового:
-// • Персонализация по имени (UserProfile)
-// • Timeline инсайтов (InsightTimeline)
-// • Микро-вызовы (DailyChallenge)
-// • График прогресса (ProgressChart)
-// • Follow-up reminder через 7 дней (FollowUpEngine)
-// • Day Cycle + Daily Task + Resources + Cross-recommendations
-// • Полная интеграция с квизами v3.0
+// ИСПРАВЛЕНИЯ:
+// • Убран fallback t() — используется t() из core/locales.js
+// • Убраны дубли: getCategoryData, getVisibleQuestions, filterSolutions
+//   (загружаются из core/engine.js раньше по порядку скриптов)
+// • startFlow теперь использует document.body.dataset.module + SOS_GET_QUIZ
+// • Исправлены тексты кнопок DailyChallenge (разные для done / not done)
+// • Исправлен updateDailyTaskUI (разные иконки для done / not done)
 // ============================================================
 
 // ============================================================
@@ -168,7 +167,7 @@ const DailyChallenge = {
       { id: 'ch3', text: 'Write down 3 things you are grateful for', module: 'happiness' },
       { id: 'ch4', text: 'Do 1 hard task before 11 AM', module: 'responsibility' },
       { id: 'ch5', text: 'Call a loved one for no reason', module: 'relationships' },
-      { id: 'ch6', text: 'Save 10% of today\'s income', module: 'money' },
+      { id: 'ch6', text: "Save 10% of today's income", module: 'money' },
       { id: 'ch7', text: 'Go to bed before 11 PM', module: 'health' },
       { id: 'ch8', text: 'Read 10 pages of a book', module: 'learning' },
       { id: 'ch9', text: 'Do a 10-minute meditation', module: 'health' },
@@ -209,6 +208,10 @@ const DailyChallenge = {
     const streak = this.getStreak();
     const doneClass = ch.done ? 'done' : '';
     const btnDisabled = ch.done ? 'disabled' : '';
+    // ✅ FIX: разные тексты для выполненного и активного состояния
+    const btnText = ch.done
+      ? ('✅ ' + (t('daily_task_done') || 'Выполнено'))
+      : ('🎯 ' + (t('challenge_do') || 'Выполнить вызов'));
     container.innerHTML = `
       <div class="challenge-card ${doneClass}">
         <div class="challenge-header">
@@ -218,7 +221,7 @@ const DailyChallenge = {
         </div>
         <p class="challenge-text">${ch.text}</p>
         <button class="challenge-btn" onclick="completeChallenge()" ${btnDisabled}>
-          ${ch.done ? '✅ ' + (t('daily_task_done') || 'Выполнено') : '✅ ' + (t('daily_task_done') || 'Выполнено')}
+          ${btnText}
         </button>
       </div>
     `;
@@ -369,60 +372,25 @@ window.skipFollowUp = skipFollowUp;
 // ============================================================
 // 8. КВИЗ-ЯДРО
 // ============================================================
+// Примечание: getCategoryData, getVisibleQuestions, filterSolutions
+// загружаются из core/engine.js (загружается раньше app.js)
 
 let currentFlow = null;
 let currentAnswers = {};
 let currentQuestionIndex = 0;
 
-function getCategoryData(category) {
-  // Ищем во всех зарегистрированных квизах
-  if (typeof SOS_QUIZ_REGISTRY !== 'undefined') {
-    const key = Object.keys(SOS_QUIZ_REGISTRY).find(k => {
-      const q = SOS_QUIZ_REGISTRY[k];
-      return q.meta && q.meta.category === category;
-    });
-    if (key) return SOS_QUIZ_REGISTRY[key];
-  }
-  return null;
-}
-
-function getVisibleQuestions(questions, answers) {
-  return questions.filter(q => {
-    if (!q.conditions) return true;
-    for (const key in q.conditions) {
-      const val = answers[key];
-      if (!val || !q.conditions[key].includes(val)) return false;
-    }
-    return true;
-  });
-}
-
-function filterSolutions(quiz, answers) {
-  const solutions = quiz.solutions || [];
-  const matched = [];
-  const fallbacks = [];
-
-  for (const sol of solutions) {
-    if (!sol.conditions || Object.keys(sol.conditions).length === 0) {
-      fallbacks.push(sol);
-      continue;
-    }
-    let match = true;
-    for (const key in sol.conditions) {
-      const val = answers[key];
-      if (!val || !sol.conditions[key].includes(val)) {
-        match = false;
-        break;
-      }
-    }
-    if (match) matched.push(sol);
-  }
-
-  return matched.length > 0 ? matched : fallbacks;
-}
-
+// ✅ FIX: startFlow теперь использует data-module + SOS_GET_QUIZ
 function startFlow(category) {
-  const quiz = getCategoryData(category);
+  const module = document.body.dataset.module;
+  if (!module) {
+    console.error('❌ Нет data-module на <body>');
+    showToast('Ошибка конфигурации модуля');
+    return;
+  }
+  const lang = window.currentLang || 'ru';
+  const quiz = (typeof SOS_GET_QUIZ === 'function')
+    ? SOS_GET_QUIZ(module, category, lang)
+    : null;
   if (!quiz) {
     showToast('Категория не найдена: ' + category);
     return;
@@ -664,6 +632,7 @@ function goHome() {
 }
 window.goHome = goHome;
 
+// ✅ FIX: разные иконки/тексты для done / not done
 function updateDailyTaskUI() {
   if (typeof ProgressEngine === 'undefined') return;
   const task = ProgressEngine.getDailyAction();
@@ -675,12 +644,16 @@ function updateDailyTaskUI() {
   const doneKey = 'compass_daily_' + new Date().toDateString();
   const isDone = localStorage.getItem(doneKey) === 'true';
 
+  const btnText = isDone
+    ? ('✅ ' + (t('daily_task_done') || 'Выполнено'))
+    : ('⬜ ' + (t('daily_task_done') || 'Выполнено'));
+
   container.innerHTML = `
     <div class="daily-task-content ${isDone ? 'done' : ''}">
       <div class="daily-task-title">🎯 ${t('daily_task_title') || 'Задание дня'}</div>
       <div class="daily-task-text">${task.text}</div>
       <button class="daily-task-btn" onclick="completeDailyTask()" ${isDone ? 'disabled style="opacity:0.5"' : ''}>
-        ${isDone ? '✅ ' + (t('daily_task_done') || 'Выполнено') : '✅ ' + (t('daily_task_done') || 'Выполнено')}
+        ${btnText}
       </button>
     </div>
   `;
@@ -739,47 +712,10 @@ document.addEventListener('DOMContentLoaded', function() {
     initHomeEnhanced();
   }
 
-  console.log('✅ App v3.0 Hybrid загружен (UserProfile + Timeline + Challenges + Chart + FollowUp + DayCycle)');
+  console.log('✅ App v3.0-FIX загружен (без дублей, без fallback t(), с data-module)');
 });
 
 // ============================================================
-// 14. ПЕРЕВОДЫ (fallback)
+// 14. [УДАЛЕНО] Fallback-переводы
+// Функция t() загружается из core/locales.js (загружается раньше)
 // ============================================================
-
-function t(key, params) {
-  // Базовый fallback для переводов
-  const translations = {
-    'question_of': 'Вопрос {current} из {total}',
-    'click_to_expand': 'Нажми на карточку, чтобы развернуть',
-    'daily_task_title': 'Задание дня',
-    'daily_task_done': 'Выполнено',
-    'detail_steps': 'Шаги',
-    'detail_warnings': 'Предупреждения',
-    'resources': 'Ресурсы',
-    'yield_estimate': 'Результат',
-    'restart': 'Начать заново',
-    'badge_fast': 'Срочно',
-    'badge_medium': 'Средний',
-    'badge_slow': 'Долгосрочный',
-    'badge_high_rel': 'Высокая',
-    'badge_medium_rel': 'Средняя',
-    'badge_low_rel': 'Низкая',
-    'followup_title': 'Проверка через неделю',
-    'followup_later': 'Напомнить позже',
-    'followup_coming': 'Через неделю мы проверим твой прогресс',
-    'challenge_title': 'Вызов дня',
-    'days': 'дней',
-    'days_streak': 'дней подряд! Ты — машина!',
-    'challenge_complete': 'Отлично! Вызов выполнен.',
-    'recommendation_title': 'Рекомендации',
-    'no_results': 'Нет решений'
-  };
-  let text = translations[key] || key;
-  if (params) {
-    for (const p in params) {
-      text = text.replace('{' + p + '}', params[p]);
-    }
-  }
-  return text;
-}
-window.t = t;
