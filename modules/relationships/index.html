@@ -16,113 +16,14 @@
   
   <style>
     /* ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ МОДУЛЯ ===== */
-    .module-header {
-      text-align: center;
-      padding: 20px 16px 8px;
-    }
-    
-    .module-header .module-icon {
-      font-size: 48px;
-    }
-    
-    .module-header h1 {
-      font-size: 28px;
-      margin: 4px 0;
-      font-weight: 800;
-      color: var(--text);
-    }
-    
-    .module-header .module-subtitle {
-      font-size: 15px;
-      color: var(--text2);
-      margin: 0;
-    }
-    
-    .lang-switcher {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      padding: 8px 16px;
-      flex-wrap: wrap;
-    }
-    
-    .lang-btn {
-      background: var(--card);
-      border: 1px solid var(--border);
-      color: var(--text2);
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    .lang-btn:hover {
-      border-color: var(--border-hover);
-      color: var(--text);
-    }
-    
     .lang-btn.active {
       border-color: #06b6d4;
       color: #06b6d4;
-      font-weight: 600;
-    }
-    
-    .theme-btn {
-      background: var(--card);
-      border: 1px solid var(--border);
-      color: var(--text2);
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    .theme-btn:hover {
-      border-color: var(--border-hover);
-      color: var(--text);
-    }
-    
-    .cat-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      padding: 0 16px 16px;
-    }
-    
-    .cat-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 20px 12px;
-      background: var(--card);
-      border: 2px solid var(--border);
-      border-radius: 16px;
-      color: var(--text);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      min-height: 100px;
-      text-align: center;
     }
     
     .cat-btn:hover {
-      transform: translateY(-3px);
       border-color: #06b6d4;
       box-shadow: 0 4px 20px rgba(6, 182, 212, 0.15);
-    }
-    
-    .cat-btn:active {
-      transform: scale(0.97);
-    }
-    
-    .cat-btn .cat-icon {
-      font-size: 32px;
     }
     
     .cat-btn .cat-badge {
@@ -411,18 +312,13 @@
 
   <!-- ===== SCRIPTS ===== -->
   <script src="../../core/locales.js"></script>
+  <script src="../../core/utils.js"></script>
   <script src="../../core/registry.js"></script>
   <script src="../../core/theme.js"></script>
   <script src="../../core/progressEngine.js"></script>
 
   <script>
     // ===== УСТАНОВКА ЯЗЫКА =====
-    function setLang(l) {
-      localStorage.setItem('compass_lang', l);
-      window.currentLang = l;
-      location.reload();
-    }
-    
     window.currentLang = localStorage.getItem('compass_lang') || 'ru';
     
     document.addEventListener('DOMContentLoaded', function() {
@@ -452,31 +348,11 @@
     }
 
     // ===== ОБНОВЛЕНИЕ МЕТА-ТЕГА ТЕМЫ =====
-    function updateThemeColor() {
-      const meta = document.getElementById('themeColorMeta');
-      if (!meta) return;
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      meta.content = isDark ? '#0c1220' : '#f1f5f9';
-    }
-    
     const observer = new MutationObserver(function() {
-      updateThemeColor();
+      window.updateThemeColor();
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    updateThemeColor();
-
-    // ===== ОБНОВЛЕНИЕ ПЕРЕВОДОВ =====
-    function updateTranslations() {
-      const lang = window.currentLang || 'ru';
-      const texts = typeof LOCALES !== 'undefined' ? (LOCALES[lang] || LOCALES.ru) : {};
-      
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.dataset.i18n;
-        if (texts[key]) {
-          el.textContent = texts[key];
-        }
-      });
-    }
+    window.updateThemeColor();
 
     // ===== ОБНОВЛЕНИЕ СТАТИСТИКИ =====
     function updateStats() {
@@ -551,32 +427,6 @@
         setTimeout(() => FollowUpEngine.checkAndShow(), 1500);
       }
     })();
-
-    function renderModuleProgress(moduleName) {
-      const container = document.getElementById('moduleProgress');
-      if (!container) return;
-
-      const moduleCategories = {
-        purpose: ['passion', 'skills'],
-        happiness: ['blockers', 'energy_audit'],
-        habits: ['identity', 'environment'],
-        money: ['os', 'audit'],
-        responsibility: ['commitments', 'planning'],
-        health: ['sleep', 'nutrition'],
-        learning: ['reading', 'techniques'],
-        creativity: ['channel', 'fear'],
-        relationships: ['family', 'conflicts']
-      };
-
-      const cats = moduleCategories[moduleName] || [];
-      const done = cats.filter(c => localStorage.getItem('compass_' + moduleName + '_' + c + '_completed') === 'true').length;
-      const pct = cats.length ? Math.round((done / cats.length) * 100) : 0;
-      
-      container.innerHTML = `
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-        <div class="progress-text">${typeof t === 'function' ? t('progress_modules') : '📊 Прогресс'}: ${done}/${cats.length}</div>
-      `;
-    }
   </script>
 </body>
 </html>

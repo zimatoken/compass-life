@@ -50,7 +50,10 @@ const STATIC_FILES = [
   './assets/icons/icon-384.png',
   './assets/icons/icon-512.png',
   './assets/icons/icon-1024.png',
-  './assets/icons/apple-touch-icon.png'
+  './assets/icons/apple-touch-icon.png',
+  
+  // Изображения
+  './assets/images/qr-code-compass.png'
 ];
 
 // ===== ДИНАМИЧЕСКИЕ ФАЙЛЫ (добавляются по мере использования) =====

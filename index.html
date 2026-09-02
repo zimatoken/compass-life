@@ -336,9 +336,8 @@
 
       <!-- QR-КОМПАКТ -->
       <div class="qr-compact" onclick="window.open('https://zimatoken.github.io/compass-life/', '_blank')">
-        <span class="qr-icon">📱</span>
-        <span class="qr-text"><strong>Установи приложение</strong> — отсканируй QR-код или перейди по ссылке</span>
-        <span class="qr-arrow">→</span>
+        <img src="assets/images/qr-code-compass.png" alt="QR-код для установки приложения" style="max-width:150px; display:block; margin:0 auto;">
+        <span class="qr-text" style="display:block; text-align:center; margin-top:8px;"><strong>Установи приложение</strong> — отсканируй QR-код или перейди по ссылке</span>
       </div>
 
       <!-- СПОЙЛЕР ПОДДЕРЖКИ -->
@@ -360,7 +359,7 @@
 
       <!-- Подвал -->
       <div class="footer">
-        <span data-i18n="footer_text">v3.2 · Life Compass</span>
+        <span data-i18n="footer_text">v3.0 · Life Compass</span>
         <span style="display:block;margin-top:4px;font-size:12px">📧 compass.life.help@gmail.com</span>
       </div>
     </div>
@@ -370,6 +369,7 @@
 
   <!-- ===== SCRIPTS ===== -->
   <script src="./core/locales.js"></script>
+  <script src="./core/utils.js"></script>
   <script src="./core/registry.js"></script>
   <script src="./core/theme.js"></script>
   <script src="./core/progressEngine.js"></script>
@@ -382,21 +382,7 @@
     (function() {
       'use strict';
 
-      // ===== 1. ОБНОВЛЕНИЕ ПЕРЕВОДОВ =====
-      function updateTranslations() {
-        const lang = window.currentLang || 'ru';
-        const texts = typeof LOCALES !== 'undefined' ? (LOCALES[lang] || LOCALES.ru) : {};
-        
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-          const key = el.dataset.i18n;
-          if (texts[key] !== undefined && texts[key] !== null) {
-            el.textContent = texts[key];
-          }
-        });
-      }
-      window.updateTranslations = updateTranslations;
-
-      // ===== 2. TOGGLE SUPPORT =====
+      // ===== 1. TOGGLE SUPPORT =====
       window.toggleSupport = function(el) {
         const body = el.nextElementSibling;
         const isOpen = body.classList.contains('open');
@@ -470,13 +456,8 @@
       }
 
       // ===== 4. МЕТА-ТЕГ ТЕМЫ =====
-      function updateThemeColor() {
-        const meta = document.getElementById('themeColorMeta');
-        if (!meta) return;
-        meta.content = document.documentElement.getAttribute('data-theme') === 'dark' ? '#0c1220' : '#f1f5f9';
-      }
-      new MutationObserver(updateThemeColor).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-      updateThemeColor();
+      new MutationObserver(window.updateThemeColor).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      window.updateThemeColor();
 
       // ===== 5. ЦИКЛ ДНЯ =====
       function renderDayCycle() {
@@ -600,7 +581,7 @@
         });
       }
 
-      console.log('✅ Index.html v3.2-FIX загружен');
+      console.log('✅ Index.html v3.0 загружен');
     })();
   </script>
 </body>

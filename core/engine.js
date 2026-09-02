@@ -217,4 +217,4 @@ function getModuleCategories(module, lang) {
 }
 window.getModuleCategories = getModuleCategories;
 
-console.log('✅ Engine v3.0-FIX загружен (без дублирования реестра)');
+console.log('✅ Engine v3.0 загружен (без дублирования реестра)');
