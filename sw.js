@@ -1,12 +1,13 @@
 // ============================================================
-// SERVICE WORKER — КОМПАС ПО ЖИЗНИ v3.0
+// SERVICE WORKER — КОМПАС ПО ЖИЗНИ v3.0.1
 // ============================================================
 // Стратегия: Cache First с сетевым обновлением (Stale-While-Revalidate)
-// Кэшируются: HTML, CSS, JS, иконки, шрифты
+// Кэшируются: HTML, CSS, JS, иконки, шрифты, все файлы модулей и данные
+// Версия: v3.0.1 — добавлен utils.js, обновлены все пути
 // ============================================================
 
-const CACHE_NAME = 'compass-life-v3.0.0';
-const OFFLINE_CACHE = 'compass-life-offline-v3.0.0';
+const CACHE_NAME = 'compass-life-v3.0.1';
+const OFFLINE_CACHE = 'compass-life-offline-v3.0.1';
 
 // ===== ФАЙЛЫ ДЛЯ КЭШИРОВАНИЯ =====
 const STATIC_FILES = [
@@ -25,11 +26,12 @@ const STATIC_FILES = [
   './core/progressEngine.js',
   './core/tracker.js',
   './core/app.js',
+  './core/utils.js',   // ✅ ДОБАВЛЕН
   
   // Стили
   './css/styles.css',
   
-  // Стили модулей
+  // Стили модулей (все 9)
   './css/modules/purpose.css',
   './css/modules/happiness.css',
   './css/modules/habits.css',
@@ -40,7 +42,7 @@ const STATIC_FILES = [
   './css/modules/creativity.css',
   './css/modules/learning.css',
   
-  // Иконки
+  // Иконки PWA (все размеры)
   './assets/icons/icon-72.png',
   './assets/icons/icon-96.png',
   './assets/icons/icon-128.png',
@@ -52,23 +54,28 @@ const STATIC_FILES = [
   './assets/icons/icon-1024.png',
   './assets/icons/apple-touch-icon.png',
   
-  // Изображения
+  // Изображения (QR-код)
   './assets/images/qr-code-compass.png'
 ];
 
 // ===== ДИНАМИЧЕСКИЕ ФАЙЛЫ (добавляются по мере использования) =====
+// Эти паттерны кэшируют все модули, данные и ресурсы
 const DYNAMIC_PATTERNS = [
+  // Все index.html модулей
   /^.*\/modules\/.*\/index\.html$/,
+  // Все файлы данных (русские и английские)
   /^.*\/modules\/.*\/data\/.*\.js$/,
   /^.*\/modules\/.*\/data\/en\/.*\.js$/,
+  // Все модульные CSS (если будут)
   /^.*\/modules\/.*\/css\/.*\.css$/,
+  // Все изображения и медиа
   /^.*\/assets\/.*\.(png|jpg|jpeg|svg|webp|ico)$/,
   /^.*\/assets\/.*\.(woff|woff2|ttf|eot)$/
 ];
 
 // ===== УСТАНОВКА =====
 self.addEventListener('install', event => {
-  console.log('[SW] 📦 Установка v3.0');
+  console.log('[SW] 📦 Установка v3.0.1');
   
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -91,7 +98,7 @@ self.addEventListener('install', event => {
 
 // ===== АКТИВАЦИЯ =====
 self.addEventListener('activate', event => {
-  console.log('[SW] ⚡ Активация v3.0');
+  console.log('[SW] ⚡ Активация v3.0.1');
   
   event.waitUntil(
     caches.keys()
@@ -99,9 +106,10 @@ self.addEventListener('activate', event => {
         return Promise.all(
           cacheNames
             .filter(name => {
-              // Удаляем старые кэши (не начинающиеся с compass-life)
-              const isOld = !name.startsWith('compass-life-');
-              if (isOld) {
+              // Удаляем старые кэши, которые не начинаются с compass-life
+              // Или если версия меньше текущей
+              const isOld = !name.startsWith('compass-life-') || name !== CACHE_NAME;
+              if (isOld && name.startsWith('compass-life-')) {
                 console.log('[SW] 🗑️ Удаление старого кэша:', name);
               }
               return isOld;
@@ -285,4 +293,4 @@ self.addEventListener('online', () => {
   // Можно обновить кэш
 });
 
-console.log('[SW] ✅ Service Worker v3.0 загружен');
+console.log('[SW] ✅ Service Worker v3.0.1 загружен');
